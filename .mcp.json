@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "cabal-hunter": {
+      "url": "https://api.cabal-hunter.com/mcp",
+      "description": "On-chain Solana token cabal detection — traces coordinated wallet funding before you buy"
+    }
+  }
+}

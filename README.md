@@ -1,0 +1,242 @@
+# Solana Safe Sniper — MCP Template
+
+> Stop your AI trading agents getting rugged by coordinated wallet cabals.
+> Drop-in template for Claude Code, Cursor, and ElizaOS.
+
+---
+
+## The Problem
+
+Your autonomous trading agent is reading rug.check scores, liquidity locks, and contract audits.
+
+**None of that catches a cabal.**
+
+A cabal is 15 fresh wallets — all funded from the same master wallet, all buying in the first 90 seconds of launch — quietly accumulating 25-40% of supply before your bot sees the first candle. Contract clean. LP burned. Everything green.
+
+Then they dump. Simultaneously. Into your liquidity.
+
+This template integrates **[Cabal-Hunter](https://api.cabal-hunter.com)** — a live on-chain funding tracer — as a pre-trade safety check so your agent catches coordinated launches before it signs a swap.
+
+---
+
+## What Cabal-Hunter Does
+
+```
+Token mint address
+      ↓
+Fetch top 20 holders via Helius RPC
+      ↓
+Trace each wallet's SOL funding source (getSignaturesForAddress + getTransaction)
+      ↓
+Temporal clustering: who was funded by the same source, within the same window?
+      ↓
+Returns: Cabal Score (0-100) + cluster map + hard verdict
+```
+
+**Response in <600ms** on pre-indexed tokens (tokens your bot has already scanned).
+
+**Cost: $0.05 USDC per query.** Paid natively on Solana. No account. No API key. No subscription.
+
+---
+
+## Quick Start
+
+### 1. Claude Code / Claude Desktop
+
+Add to your MCP config (`~/.claude/mcp.json` or project `.mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "cabal-hunter": {
+      "url": "https://api.cabal-hunter.com/mcp"
+    }
+  }
+}
+```
+
+That's it. Claude will now call `check_cabal_risk` automatically when you ask it to analyse a Solana token.
+
+**Example prompt:**
+> "Before we buy into this token, check if there are any coordinated wallets: `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`"
+
+Claude calls the tool, pays $0.05 USDC from your connected wallet, and returns the full analysis.
+
+---
+
+### 2. Cursor
+
+Add to `.cursor/mcp.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "cabal-hunter": {
+      "url": "https://api.cabal-hunter.com/mcp"
+    }
+  }
+}
+```
+
+---
+
+### 3. ElizaOS (with automatic x402 payment)
+
+If you're using ElizaOS with `@hugen/plugin-x402-solana`, payment is handled automatically. Add to your agent config:
+
+```json
+{
+  "plugins": ["@hugen/plugin-x402-solana"],
+  "mcpServers": {
+    "cabal-hunter": {
+      "url": "https://api.cabal-hunter.com/mcp"
+    }
+  }
+}
+```
+
+Your agent will call `check_cabal_risk(mintAddress)` before any swap and abort if `cabalScore >= 35` or `isControlled === true`.
+
+---
+
+### 4. Direct REST API
+
+For headless scripts, custom bots, or any language:
+
+**Step 1 — Request analysis (get payment instructions):**
+```bash
+curl -X POST https://api.cabal-hunter.com/api/scan-cabal \
+  -H "Content-Type: application/json" \
+  -d '{"mintAddress": "YOUR_MINT_ADDRESS"}'
+```
+
+Response (HTTP 402):
+```json
+{
+  "error": "payment_required",
+  "payment": {
+    "recipient": "ATYjZ1kWoHWhj74umGJ8wFqUeW1yeSGBbLi1UQpahPxt",
+    "amount_usdc": 0.05,
+    "memo_required": "ch-xxxx-xxxx-xxxx",
+    "instructions": "Send 0.05 USDC with this memo, then resubmit with X-Payment-Signature header"
+  }
+}
+```
+
+**Step 2 — Pay & resubmit:**
+```bash
+curl -X POST https://api.cabal-hunter.com/api/scan-cabal \
+  -H "Content-Type: application/json" \
+  -H "X-Payment-Signature: YOUR_TX_SIGNATURE" \
+  -d '{"mintAddress": "YOUR_MINT_ADDRESS"}'
+```
+
+**Response (HTTP 200):**
+```json
+{
+  "mint": "YOUR_MINT",
+  "token_name": "EXAMPLE",
+  "risk": "HIGH",
+  "cabal_score": 72.4,
+  "is_controlled": true,
+  "verdict": "AVOID — 4 wallets from same funder control 34.1% of supply. High probability of coordinated dump.",
+  "coordinated_clusters": [
+    {
+      "master_short": "5TbRN6…2TGC",
+      "wallet_count": 4,
+      "combined_pct": 34.1,
+      "risk": "HIGH"
+    }
+  ],
+  "holders": [...],
+  "wallets_checked": 12,
+  "analysis_time_ms": 487,
+  "source": "real_time"
+}
+```
+
+---
+
+## Integrate into Your Trading Logic
+
+```python
+import requests
+
+def is_safe_to_buy(mint_address: str, payment_sig: str) -> bool:
+    """Returns True if token passes cabal check."""
+    resp = requests.post(
+        "https://api.cabal-hunter.com/api/scan-cabal",
+        json={"mintAddress": mint_address},
+        headers={"X-Payment-Signature": payment_sig}
+    )
+    if resp.status_code != 200:
+        return False  # fail-safe: don't buy on error
+    data = resp.json()
+    # Block if controlled OR score above threshold
+    return not data.get("is_controlled") and data.get("cabal_score", 100) < 35
+
+# In your bot's buy logic:
+if is_safe_to_buy(token_mint, my_payment_sig):
+    execute_swap(token_mint, sol_amount)
+else:
+    print(f"Cabal detected — skipping {token_mint}")
+```
+
+---
+
+## Visual Bubble Map (Free)
+
+See exactly what the analysis found — coloured clusters, funding connections, holder distribution:
+
+```
+https://api.cabal-hunter.com/map?mint=ANY_SOLANA_MINT
+```
+
+Free to view. Share this URL when you catch a rug. Every holder bubble is clickable and links to Solscan for deep-dive research.
+
+---
+
+## Pricing
+
+| Queries | Cost |
+|---------|------|
+| Per query | $0.05 USDC |
+| 100 queries | $5.00 USDC |
+| 1,000 queries | $50.00 USDC |
+| 10,000 queries | $500.00 USDC |
+
+One avoided rug typically saves 10–100× the cost of a month's queries.
+
+Payment is native on Solana — no credit card, no account, no subscription.
+
+---
+
+## API Reference
+
+| Endpoint | Description | Auth |
+|----------|-------------|------|
+| `POST /api/scan-cabal` | Full cabal analysis | $0.05 USDC |
+| `GET /api/scan-cabal?mintAddress=` | GET version | $0.05 USDC |
+| `GET /map?mint=` | Visual bubble map | Free |
+| `GET /api/info` | Pricing, endpoints | Free |
+| `GET /health` | Uptime check | Free |
+| `POST /mcp` | MCP tool endpoint | $0.05 USDC per call |
+
+---
+
+## Infrastructure
+
+- **RPC**: Dedicated Helius node (Frankfurt) — fastest Solana data available
+- **Hosting**: AWS EC2 Frankfurt — low latency for EU/global
+- **Analysis**: Real on-chain data — no scrapers, no caches of cached caches
+- **Uptime**: 99.9% target — monitored, auto-restart via systemd
+
+---
+
+## License
+
+MIT — fork it, build on it, integrate it. If you build something with this, share it.
+
+---
+
+*Built by [PF Capital](https://api.cabal-hunter.com) · Powered by Helius · Contact: api.cabal-hunter.com/api/info*
