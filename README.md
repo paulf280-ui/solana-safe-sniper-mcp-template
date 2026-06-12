@@ -19,23 +19,32 @@ This template integrates **[Cabal-Hunter](https://api.cabal-hunter.com)** — a 
 
 ---
 
-## What Cabal-Hunter Does
+## What Cabal-Hunter Does — Three Detection Layers
 
 ```
 Token mint address
       ↓
-Fetch top 20 holders via Helius RPC
+1. FUNDING TRACE — top holders walked back to launch: who was funded
+   by the same source wallet? (classic cabal signature)
       ↓
-Trace each wallet's SOL funding source (getSignaturesForAddress + getTransaction)
+2. SAME-BLOCK BUNDLE DETECTION — holders whose token accounts were
+   created in the EXACT same slot bought in one Jito bundle. Catches
+   stealth launches that route funding through intermediaries to
+   evade layer 1. Returned as `time_sync: true`.
       ↓
-Temporal clustering: who was funded by the same source, within the same window?
+3. DEPLOYER TRACK RECORD — the creator wallet is resolved on-chain
+   (bonding curve pre-graduation, pump-amm pool after — works on any
+   age token), their full launch history pulled, and every previous
+   token checked: alive or dead?
       ↓
-Returns: Cabal Score (0-100) + cluster map + hard verdict
+Returns: Cabal Score (0-100) + cluster map + deployer verdict + hard verdict
 ```
 
-**Response in <600ms** on pre-indexed tokens (tokens your bot has already scanned).
+The deployer layer is the one cabals can't dodge: **wallets rotate, deployers leave a paper trail.** A response of `"deployer": {"verdict": "SERIAL_RUGGER", "tokens_launched": 14, "dead": 13}` tells you everything before the first candle.
 
-**Cost: $0.05 USDC per query.** Paid natively on Solana. No account. No API key. No subscription.
+**Response in <100ms** on pre-indexed tokens — every pump.fun graduation is scanned and cached automatically as it happens.
+
+**Free tier: 100 queries/month per IP.** Then $0.05 USDC per query, paid natively on Solana. No account. No API key. No subscription.
 
 ---
 
@@ -139,15 +148,26 @@ curl -X POST https://api.cabal-hunter.com/api/scan-cabal \
   "risk": "HIGH",
   "cabal_score": 72.4,
   "is_controlled": true,
-  "verdict": "AVOID — 4 wallets from same funder control 34.1% of supply. High probability of coordinated dump.",
+  "time_sync": true,
+  "verdict": "AVOID — 4 wallets bought in the EXACT same block (bundled launch), controlling 34.1% of supply. DEPLOYER ALERT: this creator has launched 14 tokens, 13 of 13 checked are dead (100%).",
   "coordinated_clusters": [
     {
-      "master_short": "5TbRN6…2TGC",
+      "type": "time_sync",
+      "master_short": "same-block bundle",
       "wallet_count": 4,
       "combined_pct": 34.1,
       "risk": "HIGH"
     }
   ],
+  "deployer": {
+    "creator": "5TbRN6...full address...",
+    "creator_short": "5TbRN6…2TGC",
+    "tokens_launched": 14,
+    "dead": 13,
+    "sampled": 13,
+    "dead_pct": 100.0,
+    "verdict": "SERIAL_RUGGER"
+  },
   "holders": [...],
   "wallets_checked": 12,
   "analysis_time_ms": 487,
@@ -172,8 +192,15 @@ def is_safe_to_buy(mint_address: str, payment_sig: str) -> bool:
     if resp.status_code != 200:
         return False  # fail-safe: don't buy on error
     data = resp.json()
-    # Block if controlled OR score above threshold
-    return not data.get("is_controlled") and data.get("cabal_score", 100) < 35
+    # Block on: coordinated control, high score, bundled launch,
+    # or a deployer with a history of dead tokens
+    deployer_verdict = (data.get("deployer") or {}).get("verdict", "UNKNOWN")
+    return (
+        not data.get("is_controlled")
+        and data.get("cabal_score", 100) < 35
+        and not data.get("time_sync")
+        and deployer_verdict not in ("SERIAL_RUGGER", "POOR_TRACK_RECORD")
+    )
 
 # In your bot's buy logic:
 if is_safe_to_buy(token_mint, my_payment_sig):
@@ -200,6 +227,7 @@ Free to view. Share this URL when you catch a rug. Every holder bubble is clicka
 
 | Queries | Cost |
 |---------|------|
+| First 100 / month | **Free** (per IP, no signup) |
 | Per query | $0.05 USDC |
 | 100 queries | $5.00 USDC |
 | 1,000 queries | $50.00 USDC |
