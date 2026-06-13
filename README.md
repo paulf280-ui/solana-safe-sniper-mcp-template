@@ -273,6 +273,7 @@ Payment is native on Solana — no credit card, no account, no subscription.
 | `POST /api/scan-cabal` | Full cabal analysis | $0.05 USDC |
 | `GET /api/scan-cabal?mintAddress=` | GET version | $0.05 USDC |
 | `GET /map?mint=` | Visual bubble map | Free |
+| `GET /api/cex-funding?mint=` | Per-exchange funding breakdown (which CEXes funded holders, % each) | Free |
 | `GET /api/info` | Pricing, endpoints | Free |
 | `GET /health` | Uptime check | Free |
 | `POST /mcp` | MCP tool endpoint | $0.05 USDC per call |
