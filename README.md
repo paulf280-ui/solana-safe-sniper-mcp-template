@@ -275,7 +275,25 @@ Payment is native on Solana — no credit card, no account, no subscription.
 | `GET /map?mint=` | Visual bubble map | Free |
 | `GET /api/cex-funding?mint=` | Per-exchange funding breakdown (which CEXes funded holders, % each) | Free |
 | `GET /api/trade-analysis?mint=` | Cohort PnL (Team/Snipers/Insiders) + wash-trading score + exit-liquidity price impact, one call | Free |
+| `POST /api/watch` | Register an emergency dump webhook for a mint (push on dump/rug start) | Free |
 | `GET /api/info` | Pricing, endpoints | Free |
+
+### Emergency dump webhook (auto-exit)
+
+Instead of polling, let your bot subscribe to a token it holds — we push the moment a coordinated dump or liquidity drain starts:
+
+```bash
+curl -X POST https://api.cabal-hunter.com/api/watch \
+  -H "Content-Type: application/json" \
+  -d '{"mint":"YOUR_MINT","webhook_url":"https://your-bot.com/dump-alert"}'
+```
+
+Your endpoint receives:
+```json
+{ "event":"dump_detected", "mint":"...", "reason":"price −34% since last check",
+  "coordinated": true, "price_usd": 0.0001, "liquidity_usd": 4200,
+  "action":"consider_immediate_exit", "ts": 1781370000 }
+```
 | `GET /health` | Uptime check | Free |
 | `POST /mcp` | MCP tool endpoint | $0.05 USDC per call |
 
