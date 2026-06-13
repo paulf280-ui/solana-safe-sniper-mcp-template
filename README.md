@@ -274,6 +274,7 @@ Payment is native on Solana — no credit card, no account, no subscription.
 | `GET /api/scan-cabal?mintAddress=` | GET version | $0.05 USDC |
 | `GET /map?mint=` | Visual bubble map | Free |
 | `GET /api/cex-funding?mint=` | Per-exchange funding breakdown (which CEXes funded holders, % each) | Free |
+| `GET /api/trade-analysis?mint=` | Cohort PnL (Team/Snipers/Insiders) + wash-trading score + exit-liquidity price impact, one call | Free |
 | `GET /api/info` | Pricing, endpoints | Free |
 | `GET /health` | Uptime check | Free |
 | `POST /mcp` | MCP tool endpoint | $0.05 USDC per call |
