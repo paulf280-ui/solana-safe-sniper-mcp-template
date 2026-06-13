@@ -19,13 +19,14 @@ This template integrates **[Cabal-Hunter](https://api.cabal-hunter.com)** — a 
 
 ---
 
-## What Cabal-Hunter Does — Three Detection Layers
+## What Cabal-Hunter Does — Four Detection Layers
 
 ```
 Token mint address
       ↓
 1. FUNDING TRACE — top holders walked back to launch: who was funded
-   by the same source wallet? (classic cabal signature)
+   by the same source wallet? (classic cabal signature). Every cluster
+   carries evidence_txs[] — the actual funding transactions on Solscan.
       ↓
 2. SAME-BLOCK BUNDLE DETECTION — holders whose token accounts were
    created in the EXACT same slot bought in one Jito bundle. Catches
@@ -37,10 +38,18 @@ Token mint address
    age token), their full launch history pulled, and every previous
    token checked: alive or dead?
       ↓
-Returns: Cabal Score (0-100) + cluster map + deployer verdict + hard verdict
+4. CEX-NOISE FILTER — holders funded from a shared exchange or
+   high-volume infra wallet are NOT a cabal. They're excluded from the
+   score and surfaced transparently in filtered_clusters[], so you never
+   get a false positive from people who just withdrew from Binance.
+      ↓
+Returns: Cabal Score (0-100) + cluster map + deployer verdict
+         + on-chain receipts + hard verdict
 ```
 
 The deployer layer is the one cabals can't dodge: **wallets rotate, deployers leave a paper trail.** A response of `"deployer": {"verdict": "SERIAL_RUGGER", "tokens_launched": 14, "dead": 13}` tells you everything before the first candle.
+
+**Receipts, not magic.** Every cluster and red flag links to the underlying Solscan transaction (`evidence_txs[]`, `holders[].funding_tx`) — verify the trail yourself instead of trusting a score.
 
 **Response in <100ms** on pre-indexed tokens — every pump.fun graduation is scanned and cached automatically as it happens.
 
@@ -152,11 +161,21 @@ curl -X POST https://api.cabal-hunter.com/api/scan-cabal \
   "verdict": "AVOID — 4 wallets bought in the EXACT same block (bundled launch), controlling 34.1% of supply. DEPLOYER ALERT: this creator has launched 14 tokens, 13 of 13 checked are dead (100%).",
   "coordinated_clusters": [
     {
-      "type": "time_sync",
-      "master_short": "same-block bundle",
+      "type": "funding",
+      "master_full": "FvbEKF...9RUg",
+      "master_short": "FvbEKF…9RUg",
       "wallet_count": 4,
       "combined_pct": 34.1,
-      "risk": "HIGH"
+      "risk": "HIGH",
+      "evidence_txs": ["4Y8auc5G...", "2XQx9LFv...", "AAbJ7rej..."]
+    }
+  ],
+  "filtered_clusters": [
+    {
+      "funder_label": "high-volume wallet",
+      "master_short": "43ViqZ…Z6iy",
+      "wallet_count": 2,
+      "combined_pct": 4.4
     }
   ],
   "deployer": {
@@ -168,7 +187,9 @@ curl -X POST https://api.cabal-hunter.com/api/scan-cabal \
     "dead_pct": 100.0,
     "verdict": "SERIAL_RUGGER"
   },
-  "holders": [...],
+  "holders": [
+    { "rank": 1, "address": "...", "pct": 12.4, "cluster_id": 0, "funding_tx": "4Y8auc5G..." }
+  ],
   "wallets_checked": 12,
   "analysis_time_ms": 487,
   "source": "real_time"
