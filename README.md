@@ -19,7 +19,7 @@ This template integrates **[Cabal-Hunter](https://api.cabal-hunter.com)** — a 
 
 ---
 
-## What Cabal-Hunter Does — Four Detection Layers
+## What Cabal-Hunter Does — Five Detection Layers
 
 ```
 Token mint address
@@ -33,12 +33,18 @@ Token mint address
    stealth launches that route funding through intermediaries to
    evade layer 1. Returned as `time_sync: true`.
       ↓
-3. DEPLOYER TRACK RECORD — the creator wallet is resolved on-chain
+3. COORDINATED DUMP DETECTION — ≥2 holders that SOLD a meaningful chunk
+   (≥25% of their bag each) in the EXACT same block — a cabal exiting in
+   real time. `coordinated_exit: true`, with sold_pct = % of supply
+   dumped and the sell transactions linked. Same-slot + meaningful-size +
+   distinct wallets = near-zero false positives.
+      ↓
+4. DEPLOYER TRACK RECORD — the creator wallet is resolved on-chain
    (bonding curve pre-graduation, pump-amm pool after — works on any
    age token), their full launch history pulled, and every previous
    token checked: alive or dead?
       ↓
-4. CEX-NOISE FILTER — holders funded from a shared exchange or
+5. CEX-NOISE FILTER — holders funded from a shared exchange or
    high-volume infra wallet are NOT a cabal. They're excluded from the
    score and surfaced transparently in filtered_clusters[], so you never
    get a false positive from people who just withdrew from Binance.
