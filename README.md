@@ -19,10 +19,19 @@ This template integrates **[Cabal-Hunter](https://api.cabal-hunter.com)** — a 
 
 ---
 
-## What Cabal-Hunter Does — Five Detection Layers
+## The one question it answers: are YOU the exit liquidity?
+
+On Solana, **over half of pump.fun launches are sniped in the creation block by wallets the deployer funded** — they buy at the bottom and dump on the retail (and bots) that pile in after. Cabal-Hunter's headline output is a single **Exit-Liquidity Risk** verdict (`LOW | ELEVATED | HIGH`) that synthesises every signal below into the only thing that matters before you sign a swap: *are the insiders positioned to dump on you?*
+
+## What Cabal-Hunter Does — Six Detection Layers
 
 ```
 Token mint address
+      ↓
+0. EXIT-LIQUIDITY RISK — the headline verdict. Synthesises the layers
+   below (bundle, concentration, shared funder, coordinated dump, serial-
+   rug dev) into LOW | ELEVATED | HIGH: are insiders set up to dump on
+   a buyer? The one number a trading agent needs.
       ↓
 1. FUNDING TRACE — top holders walked back to launch: who was funded
    by the same source wallet? (classic cabal signature). Every cluster
