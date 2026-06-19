@@ -3,6 +3,8 @@
 > Stop your AI trading agents getting rugged by coordinated wallet cabals.
 > Drop-in template for Claude Code, Cursor, and ElizaOS.
 
+**Cabal-Hunter is a free on-chain Solana token safety scanner and rug checker.** It detects coordinated wallet cabals, same-block Jito bundle buys, serial-rug deployers and coordinated dumps on any Solana mint (pump.fun, PumpSwap, Raydium) — and answers the one question that matters before you ape: *are you the exit liquidity?* Use it via **MCP** (Claude, Cursor, ElizaOS), a **REST API**, or a free **visual bubble map**.
+
 ---
 
 ## The Problem
@@ -314,6 +316,22 @@ Your endpoint receives:
 - **Hosting**: AWS EC2 Frankfurt — low latency for EU/global
 - **Analysis**: Real on-chain data — no scrapers, no caches of cached caches
 - **Uptime**: 99.9% target — monitored, auto-restart via systemd
+
+---
+
+## FAQ
+
+**What is a Solana cabal?**
+A group of wallets — often funded from the same source and buying in the same block — that quietly accumulate a large share of a token's supply before retail, then dump simultaneously into everyone who buys after launch.
+
+**How do I check if a Solana token is a rug?**
+Scan the mint with Cabal-Hunter (MCP, REST API, or the free bubble map). It traces holder funding back to shared sources, detects same-block bundle buys, flags serial-rug deployers and live coordinated dumps, and returns an **Exit-Liquidity Risk** verdict: `LOW`, `ELEVATED`, or `HIGH`.
+
+**Is it free?**
+Yes — 100 queries/month per IP, with no signup or API key. Beyond that it's $0.05 USDC per query, paid natively on Solana.
+
+**Can AI trading agents use it?**
+Yes — that's the whole point. The MCP server (`api.cabal-hunter.com/mcp`) lets Claude, Cursor and ElizaOS agents call `check_cabal_risk(mintAddress)` automatically before any swap, and a REST API covers any other language.
 
 ---
 
