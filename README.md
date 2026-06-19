@@ -223,6 +223,36 @@ curl -X POST https://api.cabal-hunter.com/api/scan-cabal \
 }
 ```
 
+### 5. Run the MCP server locally (Docker / Node)
+
+Prefer to run the connector yourself instead of hitting the hosted `/mcp`
+endpoint? This repo ships a thin **stdio MCP server** that exposes
+`check_cabal_risk(mintAddress)` and proxies to the Cabal-Hunter API (free tier
+works with no key; paid scans use x402 at call time):
+
+```bash
+# Node 18+
+npm install
+node server/index.mjs
+
+# or Docker
+docker build -t cabal-hunter-mcp .
+docker run -i cabal-hunter-mcp
+```
+
+Then point any MCP client at the local command:
+
+```json
+{
+  "mcpServers": {
+    "cabal-hunter": {
+      "command": "node",
+      "args": ["server/index.mjs"]
+    }
+  }
+}
+```
+
 ---
 
 ## Integrate into Your Trading Logic

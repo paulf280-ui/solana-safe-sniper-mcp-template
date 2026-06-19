@@ -1,0 +1,28 @@
+{
+  "name": "cabal-hunter-mcp",
+  "version": "1.0.0",
+  "description": "Local stdio MCP server for Cabal-Hunter — on-chain Solana token cabal & rug detection. Proxies to api.cabal-hunter.com.",
+  "type": "module",
+  "bin": {
+    "cabal-hunter-mcp": "server/index.mjs"
+  },
+  "main": "server/index.mjs",
+  "scripts": {
+    "start": "node server/index.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.7.0"
+  },
+  "keywords": [
+    "mcp",
+    "solana",
+    "rug-detection",
+    "cabal",
+    "trading",
+    "model-context-protocol"
+  ],
+  "license": "MIT"
+}
