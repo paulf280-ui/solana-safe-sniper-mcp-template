@@ -6,6 +6,8 @@
 [![Free tier](https://img.shields.io/badge/100%2Fmo%20free-then%20%240.02-ff4d6d)](https://api.cabal-hunter.com/api/info)
 [![License: MIT](https://img.shields.io/badge/license-MIT-94a3b8)](LICENSE)
 
+![Cabal-Hunter — live Solana cabal and rug analysis: bubble map, serial-rug deployer history, and an Exit-Liquidity Risk verdict](demo/screenshot.png)
+
 > Stop your AI trading agents getting rugged by coordinated wallet cabals.
 > Drop-in template for Claude Code, Cursor, and ElizaOS.
 
