@@ -146,7 +146,15 @@ Your agent will call `check_cabal_risk(mintAddress)` before any swap and abort i
 
 ### 4. Direct REST API
 
-For headless scripts, custom bots, or any language:
+For headless scripts, custom bots, or any language. **The first 100 calls/month are free — no key, no signup.** Just call it:
+
+```bash
+curl "https://api.cabal-hunter.com/api/scan-cabal?mintAddress=YOUR_MINT_ADDRESS"
+```
+
+You get the full analysis back immediately, with `free_queries_remaining` so you always know where you stand. Machine-readable contract: [`/openapi.json`](https://api.cabal-hunter.com/openapi.json).
+
+Once the free tier is used up, calls are $0.02 USDC via x402 — your agent just pays, no billing setup:
 
 **Step 1 — Request analysis (get payment instructions):**
 ```bash
