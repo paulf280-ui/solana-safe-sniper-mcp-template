@@ -35,7 +35,7 @@ This template integrates **[Cabal-Hunter](https://api.cabal-hunter.com)** — a 
 
 On Solana, **over half of pump.fun launches are sniped in the creation block by wallets the deployer funded** — they buy at the bottom and dump on the retail (and bots) that pile in after. Cabal-Hunter's headline output is a single **Exit-Liquidity Risk** verdict (`LOW | ELEVATED | HIGH`) that synthesises every signal below into the only thing that matters before you sign a swap: *are the insiders positioned to dump on you?*
 
-## What Cabal-Hunter Does — Six Detection Layers
+## What Cabal-Hunter Does — Seven Detection Layers
 
 ```
 Token mint address
@@ -70,8 +70,18 @@ Token mint address
    score and surfaced transparently in filtered_clusters[], so you never
    get a false positive from people who just withdrew from Binance.
       ↓
+6. HONEYPOT CHECK (Solana-native) — one RPC read of the mint account:
+   is the FREEZE authority live (issuer can freeze your tokens — the
+   sell-block lever)? is the MINT authority live (supply can be
+   inflated)? any Token-2022 traps (transfer fees up to 100%, transfer
+   hooks that block sells, permanent-delegate clawback)? On Solana a
+   "honeypot" is built from these — tokens have no per-token contract
+   code to audit. Returns `honeypot_risk: LOW | HIGH` +
+   `freeze_authority_revoked` / `mint_authority_revoked` /
+   `token2022_risks[]`.
+      ↓
 Returns: Cabal Score (0-100) + cluster map + deployer verdict
-         + on-chain receipts + hard verdict
+         + honeypot verdict + on-chain receipts + hard verdict
 ```
 
 The deployer layer is the one cabals can't dodge: **wallets rotate, deployers leave a paper trail.** A response of `"deployer": {"verdict": "SERIAL_RUGGER", "tokens_launched": 14, "dead": 13}` tells you everything before the first candle.
@@ -315,9 +325,9 @@ Free to view. Share this URL when you catch a rug. Every holder bubble is clicka
 |---------|------|
 | First 100 / month | **Free** (per IP, no signup) |
 | Per query | $0.01 USDC |
-| 100 queries | $2.00 USDC |
-| 1,000 queries | $20.00 USDC |
-| 10,000 queries | $200.00 USDC |
+| 100 queries | $1.00 USDC |
+| 1,000 queries | $10.00 USDC |
+| 10,000 queries | $100.00 USDC |
 
 One avoided rug typically saves 10–100× the cost of a month's queries.
 
