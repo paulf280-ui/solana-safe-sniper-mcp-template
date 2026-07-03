@@ -4,6 +4,9 @@
 [![Solana](https://img.shields.io/badge/Solana-on--chain-14F195)](https://api.cabal-hunter.com)
 [![Live demo](https://img.shields.io/badge/%E2%96%B6%20live-bubble%20map-2dd4bf)](https://api.cabal-hunter.com/demo)
 [![Free tier](https://img.shields.io/badge/100%2Fmo%20free-then%20%240.01-ff4d6d)](https://api.cabal-hunter.com/api/info)
+[![Install MCP in VS Code](https://img.shields.io/badge/VS_Code-One--click_MCP_install-0098FF?logo=githubcopilot&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=cabal-hunter&config=%7B%22type%22%3A%20%22http%22%2C%20%22url%22%3A%20%22https%3A%2F%2Fapi.cabal-hunter.com%2Fmcp%22%7D)
+[![Install MCP in Cursor](https://img.shields.io/badge/Cursor-One--click_MCP_install-111111)](https://cursor.com/install-mcp?name=cabal-hunter&config=eyJ1cmwiOiAiaHR0cHM6Ly9hcGkuY2FiYWwtaHVudGVyLmNvbS9tY3AifQ==)
+[![ElizaOS plugin](https://img.shields.io/badge/ElizaOS-plugin--cabal--hunter-7c3aed)](https://github.com/paulf280-ui/plugin-cabal-hunter)
 [![License: MIT](https://img.shields.io/badge/license-MIT-94a3b8)](LICENSE)
 
 ![Cabal-Hunter — live Solana cabal and rug analysis: bubble map, serial-rug deployer history, and an Exit-Liquidity Risk verdict](demo/screenshot.png)
