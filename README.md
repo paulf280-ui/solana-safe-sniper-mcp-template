@@ -324,17 +324,35 @@ Free to view. Share this URL when you catch a rug. Every holder bubble is clicka
 
 ## Pricing
 
-| Queries | Cost |
-|---------|------|
-| First 100 / month | **Free** (per IP, no signup) |
-| Per query | $0.01 USDC |
-| 100 queries | $1.00 USDC |
-| 1,000 queries | $10.00 USDC |
-| 10,000 queries | $100.00 USDC |
+**First 100 scans every month are free** — per IP, no signup, no API key.
 
-One avoided rug typically saves 10–100× the cost of a month's queries.
+After that, pick whatever matches how hard your bot works (priced at cost — it covers the Helius RPC behind each live on-chain trace):
 
-Payment is native on Solana — no credit card, no account, no subscription.
+| Plan | Price | What you get |
+|------|-------|--------------|
+| **Pay as you go** | $0.01 USDC / scan | Only what you use, per call |
+| **Starter** | $5 USDC once | 550 scans (+10% bonus) |
+| **Trader** | $10 USDC once | 1,200 scans (+20% bonus) |
+| **Unlimited** ⭐ | $25 USDC / month | Scan all you want — _fair use: 50,000/mo, more than any bot needs_ |
+
+Prepaid keys: send USDC once → `POST /api/buy-key` with the tx signature → use header `X-API-Key` on every scan. Or pay per-call via x402 (`X-Payment-Signature` header). No credit card, no account, no lock-in.
+
+**Does it pay for itself?** A bot sniping $1 positions loses ~$40/month to rugs it never saw coming — rugs are the #1 way snipers bleed money. Cabal-Hunter flags them _before_ the buy. Dodge just 25 and the Unlimited tier has already paid for itself; every rug after that is capital back in your pocket, redeployed into trades that can actually run.
+
+Payment is native on Solana — no credit card, no account, no subscription lock-in.
+
+---
+
+## Live dashboard badge
+
+Drop a live safety badge into your own bot's dashboard — two lines of HTML, and every token shows its verdict as it trades:
+
+```html
+<div class="cabal-hunter-badge" data-mint="YOUR_TOKEN_MINT"></div>
+<script src="https://api.cabal-hunter.com/widget.js" defer></script>
+```
+
+It renders the 0–100 score, the plain-English verdict, and the active flags (bundled launch, coordinated dump, whale concentration, serial-rug deployer, honeypot). Add `data-refresh="120"` to re-scan live as you trade, and `data-api-key="..."` once you're past your free scans. Works anywhere — React, plain HTML, any site.
 
 ---
 
