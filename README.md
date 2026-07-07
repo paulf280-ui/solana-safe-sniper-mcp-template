@@ -3,7 +3,7 @@
 [![MCP server](https://img.shields.io/badge/MCP-server-7c3aed)](https://api.cabal-hunter.com/mcp)
 [![Solana](https://img.shields.io/badge/Solana-on--chain-14F195)](https://api.cabal-hunter.com)
 [![Live demo](https://img.shields.io/badge/%E2%96%B6%20live-bubble%20map-2dd4bf)](https://api.cabal-hunter.com/demo)
-[![Free tier](https://img.shields.io/badge/100%2Fmo%20free-then%20%240.01-ff4d6d)](https://api.cabal-hunter.com/api/info)
+[![Free tier](https://img.shields.io/badge/250%2Fmo%20free-then%20%240.001-ff4d6d)](https://api.cabal-hunter.com/api/info)
 [![Install MCP in VS Code](https://img.shields.io/badge/VS_Code-One--click_MCP_install-0098FF?logo=githubcopilot&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=cabal-hunter&config=%7B%22type%22%3A%20%22http%22%2C%20%22url%22%3A%20%22https%3A%2F%2Fapi.cabal-hunter.com%2Fmcp%22%7D)
 [![Install MCP in Cursor](https://img.shields.io/badge/Cursor-One--click_MCP_install-111111)](https://cursor.com/install-mcp?name=cabal-hunter&config=eyJ1cmwiOiAiaHR0cHM6Ly9hcGkuY2FiYWwtaHVudGVyLmNvbS9tY3AifQ==)
 [![ElizaOS plugin](https://img.shields.io/badge/ElizaOS-plugin--cabal--hunter-7c3aed)](https://github.com/paulf280-ui/plugin-cabal-hunter)
@@ -93,7 +93,7 @@ The deployer layer is the one cabals can't dodge: **wallets rotate, deployers le
 
 **Response in <100ms** on pre-indexed tokens — every pump.fun graduation is scanned and cached automatically as it happens.
 
-**Free tier: 100 queries/month per IP.** Then $0.01 USDC per query — priced at cost (it covers the Helius RPC calls behind each live on-chain trace), paid natively on Solana. No account. No API key. No subscription.
+**Free tier: 250 scans/month per IP.** Then $0.001 USDC per scan — priced at cost (it covers the Helius RPC calls behind each live on-chain trace), paid natively on Solana. No account. No API key. No subscription.
 
 ---
 
@@ -118,7 +118,7 @@ That's it. Claude will now call `check_cabal_risk` automatically when you ask it
 **Example prompt:**
 > "Before we buy into this token, check if there are any coordinated wallets: `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`"
 
-Claude calls the tool, pays $0.01 USDC from your connected wallet, and returns the full analysis.
+Claude calls the tool, pays $0.001 USDC from your connected wallet, and returns the full analysis.
 
 ---
 
@@ -167,7 +167,7 @@ curl "https://api.cabal-hunter.com/api/scan-cabal?mintAddress=YOUR_MINT_ADDRESS"
 
 You get the full analysis back immediately, with `free_queries_remaining` so you always know where you stand. Machine-readable contract: [`/openapi.json`](https://api.cabal-hunter.com/openapi.json).
 
-Once the free tier is used up, calls are $0.01 USDC via x402 — your agent just pays, no billing setup:
+Once the free tier is used up, calls are $0.001 USDC via x402 — your agent just pays, no billing setup:
 
 **Step 1 — Request analysis (get payment instructions):**
 ```bash
@@ -182,9 +182,9 @@ Response (HTTP 402):
   "error": "payment_required",
   "payment": {
     "recipient": "ATYjZ1kWoHWhj74umGJ8wFqUeW1yeSGBbLi1UQpahPxt",
-    "amount_usdc": 0.01,
+    "amount_usdc": 0.001,
     "memo_required": "ch-xxxx-xxxx-xxxx",
-    "instructions": "Send 0.01 USDC with this memo, then resubmit with X-Payment-Signature header"
+    "instructions": "Send 0.001 USDC with this memo, then resubmit with X-Payment-Signature header"
   }
 }
 ```
@@ -324,20 +324,18 @@ Free to view. Share this URL when you catch a rug. Every holder bubble is clicka
 
 ## Pricing
 
-**First 100 scans every month are free** — per IP, no signup, no API key.
+**First 250 scans every month are free** — per IP, no signup, no API key.
 
 After that, pick whatever matches how hard your bot works (priced at cost — it covers the Helius RPC behind each live on-chain trace):
 
 | Plan | Price | What you get |
 |------|-------|--------------|
-| **Pay as you go** | $0.01 USDC / scan | Only what you use, per call |
-| **Starter** | $5 USDC once | 550 scans (+10% bonus) |
-| **Trader** | $10 USDC once | 1,200 scans (+20% bonus) |
-| **Unlimited** ⭐ | $25 USDC / month | Scan all you want — _fair use: 50,000/mo, more than any bot needs_ |
+| **Unlimited** ⭐ | $9 USDC / month | Scan all you want — _fair use: 50,000/mo, more than any bot needs_ |
+| **Pay as you go** | $0.001 USDC / scan | Only what you use — prepaid or per-call, no commitment |
 
 Prepaid keys: send USDC once → `POST /api/buy-key` with the tx signature → use header `X-API-Key` on every scan. Or pay per-call via x402 (`X-Payment-Signature` header). No credit card, no account, no lock-in.
 
-**Does it pay for itself?** A bot sniping $1 positions loses ~$40/month to rugs it never saw coming — rugs are the #1 way snipers bleed money. Cabal-Hunter flags them _before_ the buy. Dodge just 25 and the Unlimited tier has already paid for itself; every rug after that is capital back in your pocket, redeployed into trades that can actually run.
+**Does it pay for itself?** A bot sniping $1 positions loses ~$40/month to rugs it never saw coming — rugs are the #1 way snipers bleed money. Cabal-Hunter flags them _before_ the buy. Dodge just 9 and the Unlimited tier has already paid for itself; every rug after that is capital back in your pocket, redeployed into trades that can actually run.
 
 Payment is native on Solana — no credit card, no account, no subscription lock-in.
 
@@ -360,8 +358,8 @@ It renders the 0–100 score, the plain-English verdict, and the active flags (b
 
 | Endpoint | Description | Auth |
 |----------|-------------|------|
-| `POST /api/scan-cabal` | Full cabal analysis | $0.01 USDC |
-| `GET /api/scan-cabal?mintAddress=` | GET version | $0.01 USDC |
+| `POST /api/scan-cabal` | Full cabal analysis | $0.001 USDC |
+| `GET /api/scan-cabal?mintAddress=` | GET version | $0.001 USDC |
 | `GET /map?mint=` | Visual bubble map | Free |
 | `GET /api/cex-funding?mint=` | Per-exchange funding breakdown (which CEXes funded holders, % each) | Free |
 | `GET /api/trade-analysis?mint=` | Cohort PnL (Team/Snipers/Insiders) + wash-trading score + exit-liquidity price impact, one call | Free |
@@ -385,7 +383,7 @@ Your endpoint receives:
   "action":"consider_immediate_exit", "ts": 1781370000 }
 ```
 | `GET /health` | Uptime check | Free |
-| `POST /mcp` | MCP tool endpoint | $0.01 USDC per call |
+| `POST /mcp` | MCP tool endpoint | $0.001 USDC per call |
 
 ---
 
@@ -407,7 +405,7 @@ A group of wallets — often funded from the same source and buying in the same 
 Scan the mint with Cabal-Hunter (MCP, REST API, or the free bubble map). It traces holder funding back to shared sources, detects same-block bundle buys, flags serial-rug deployers and live coordinated dumps, and returns an **Exit-Liquidity Risk** verdict: `LOW`, `ELEVATED`, or `HIGH`.
 
 **Is it free?**
-Yes — 100 queries/month per IP, with no signup or API key. Beyond that it's $0.01 USDC per query — which just covers the Helius RPC cost of the live trace — paid natively on Solana.
+Yes — 250 scans/month per IP, with no signup or API key. Beyond that it's $0.001 USDC per scan — which just covers the Helius RPC cost of the live trace — paid natively on Solana.
 
 **Can AI trading agents use it?**
 Yes — that's the whole point. The MCP server (`api.cabal-hunter.com/mcp`) lets Claude, Cursor and ElizaOS agents call `check_cabal_risk(mintAddress)` automatically before any swap, and a REST API covers any other language.
