@@ -246,6 +246,8 @@ curl -X POST https://api.cabal-hunter.com/api/scan-cabal \
 
 ### 5. Run the MCP server locally (Docker / Node)
 
+**Fastest — no clone needed:** `npx cabal-hunter-mcp` — the same stdio server, published to npm ([cabal-hunter-mcp](https://github.com/paulf280-ui/cabal-hunter-mcp) · [npm](https://www.npmjs.com/package/cabal-hunter-mcp)). Or run it from this repo:
+
 Prefer to run the connector yourself instead of hitting the hosted `/mcp`
 endpoint? This repo ships a thin **stdio MCP server** that exposes
 `check_cabal_risk(mintAddress)` and proxies to the Cabal-Hunter API (free tier
@@ -319,6 +321,16 @@ https://api.cabal-hunter.com/map?mint=ANY_SOLANA_MINT
 ```
 
 Free to view. Share this URL when you catch a rug. Every holder bubble is clickable and links to Solscan for deep-dive research.
+
+---
+
+## Cabal-Hunter everywhere
+
+Same detection engine, wherever your stack lives:
+
+- **`npx cabal-hunter-mcp`** — standalone MCP server for Claude · Cursor · VS Code · any MCP client: [cabal-hunter-mcp](https://github.com/paulf280-ui/cabal-hunter-mcp) · [npm](https://www.npmjs.com/package/cabal-hunter-mcp)
+- **ElizaOS plugin:** `npm i elizaos-plugin-cabal-hunter` — [plugin-cabal-hunter](https://github.com/paulf280-ui/plugin-cabal-hunter) · [npm](https://www.npmjs.com/package/elizaos-plugin-cabal-hunter)
+- **REST API + OpenAPI:** [api.cabal-hunter.com](https://api.cabal-hunter.com) · [/openapi.json](https://api.cabal-hunter.com/openapi.json)
 
 ---
 
