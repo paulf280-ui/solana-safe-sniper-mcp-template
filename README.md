@@ -9,6 +9,8 @@
 [![ElizaOS plugin](https://img.shields.io/badge/ElizaOS-plugin--cabal--hunter-7c3aed)](https://github.com/paulf280-ui/plugin-cabal-hunter)
 [![License: MIT](https://img.shields.io/badge/license-MIT-94a3b8)](LICENSE)
 
+> 🌐 **Available in 9 languages:** [English](https://api.cabal-hunter.com/) · [Español](https://api.cabal-hunter.com/es) · [Português](https://api.cabal-hunter.com/pt) · [Français](https://api.cabal-hunter.com/fr) · [Deutsch](https://api.cabal-hunter.com/de) · [Nederlands](https://api.cabal-hunter.com/nl) · [中文](https://api.cabal-hunter.com/zh) · [日本語](https://api.cabal-hunter.com/ja) · [한국어](https://api.cabal-hunter.com/ko)
+
 ![Cabal-Hunter — live Solana cabal and rug analysis: bubble map, serial-rug deployer history, and an Exit-Liquidity Risk verdict](demo/screenshot.png)
 
 > Stop your AI trading agents getting rugged by coordinated wallet cabals.
