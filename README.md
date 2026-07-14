@@ -34,6 +34,8 @@ Then they dump. Simultaneously. Into your liquidity.
 
 This template integrates **[Cabal-Hunter](https://api.cabal-hunter.com)** — a live on-chain funding tracer — as a pre-trade safety check so your agent catches coordinated launches before it signs a swap.
 
+It exposes two MCP tools: **`check_cabal_risk`** (the full exit-liquidity verdict) and **`trace_funding`** — the **pre-launch funding trace**, which walks the token's *first* buyers back to the wallet that funded them and flags when the **deployer funded the wallets that sniped their own launch**. Because it looks at who bought *at launch* rather than who holds *now*, it still catches a coordinated group **after they've sold and left a clean-looking holder list**.
+
 ---
 
 ## The one question it answers: are YOU the exit liquidity?
