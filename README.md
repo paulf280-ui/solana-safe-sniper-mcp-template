@@ -11,14 +11,14 @@
 
 > 🌐 **Available in 9 languages:** [English](https://api.cabal-hunter.com/) · [Español](https://api.cabal-hunter.com/es) · [Português](https://api.cabal-hunter.com/pt) · [Français](https://api.cabal-hunter.com/fr) · [Deutsch](https://api.cabal-hunter.com/de) · [Nederlands](https://api.cabal-hunter.com/nl) · [中文](https://api.cabal-hunter.com/zh) · [日本語](https://api.cabal-hunter.com/ja) · [한국어](https://api.cabal-hunter.com/ko)
 
-![Cabal-Hunter — live Solana cabal and rug analysis: bubble map, serial-rug deployer history, and an Exit-Liquidity Risk verdict](demo/screenshot.png)
+![Cabal-Hunter — live Solana cabal and rug analysis: bubble map, serial-launcher deployer history, and an Exit-Liquidity Risk verdict](demo/screenshot.png)
 
 > Stop your AI trading agents getting rugged by coordinated wallet cabals.
 > Drop-in template for Claude Code, Cursor, and ElizaOS.
 
 **▶ Try it now: [live bubble map of any Solana token →](https://api.cabal-hunter.com/demo)** — no signup.
 
-**Cabal-Hunter is a free on-chain Solana token safety scanner and rug checker.** It detects coordinated wallet cabals, same-block Jito bundle buys, serial-rug deployers and coordinated dumps on any Solana mint (pump.fun, PumpSwap, Raydium) — and answers the one question that matters before you ape: *are you the exit liquidity?* Use it via **MCP** (Claude, Cursor, ElizaOS), a **REST API**, or a free **visual bubble map**.
+**Cabal-Hunter is a free on-chain Solana token safety scanner and rug checker.** It detects coordinated wallet cabals, same-block Jito bundle buys, serial-launcher deployers and coordinated dumps on any Solana mint (pump.fun, PumpSwap, Raydium) — and answers the one question that matters before you ape: *are you the exit liquidity?* Use it via **MCP** (Claude, Cursor, ElizaOS), a **REST API**, or a free **visual bubble map**.
 
 ---
 
@@ -38,7 +38,7 @@ This template integrates **[Cabal-Hunter](https://api.cabal-hunter.com)** — a 
 
 ## The one question it answers: are YOU the exit liquidity?
 
-On Solana, **over half of pump.fun launches are sniped in the creation block by wallets the deployer funded** — they buy at the bottom and dump on the retail (and bots) that pile in after. Cabal-Hunter's headline output is a single **Exit-Liquidity Risk** verdict (`LOW | ELEVATED | HIGH`) that synthesises every signal below into the only thing that matters before you sign a swap: *are the insiders positioned to dump on you?*
+The classic pump.fun exit-liquidity setup: wallets positioned before the crowd take the bottom of a launch, then dump on the retail (and bots) that pile in after. Cabal-Hunter's headline output is a single **Exit-Liquidity Risk** verdict (`LOW | ELEVATED | HIGH`) that synthesises every signal below into the only thing that matters before you sign a swap: *are the insiders positioned to dump on you?*
 
 ## What Cabal-Hunter Does — Seven Detection Layers
 
@@ -89,7 +89,7 @@ Returns: Cabal Score (0-100) + cluster map + deployer verdict
          + honeypot verdict + on-chain receipts + hard verdict
 ```
 
-The deployer layer is the one cabals can't dodge: **wallets rotate, deployers leave a paper trail.** A response of `"deployer": {"verdict": "SERIAL_RUGGER", "tokens_launched": 14, "dead": 13}` tells you everything before the first candle.
+The deployer layer is the one cabals can't dodge: **wallets rotate, deployers leave a paper trail.** A response of `"deployer": {"verdict": "SERIAL_LAUNCHER", "tokens_launched": 14, "dead": 13}` shows you the dev's full track record before the first candle. (Honest context: most prolific pump.fun creators have high dead-token rates, so this signal is capped — it flags a token for review but never drives a HIGH verdict on its own.)
 
 **Receipts, not magic.** Every cluster and red flag links to the underlying Solscan transaction (`evidence_txs[]`, `holders[].funding_tx`) — verify the trail yourself instead of trusting a score.
 
@@ -235,7 +235,7 @@ curl -X POST https://api.cabal-hunter.com/api/scan-cabal \
     "dead": 13,
     "sampled": 13,
     "dead_pct": 100.0,
-    "verdict": "SERIAL_RUGGER"
+    "verdict": "SERIAL_LAUNCHER"
   },
   "holders": [
     { "rank": 1, "address": "...", "pct": 12.4, "cluster_id": 0, "funding_tx": "4Y8auc5G..." }
@@ -302,7 +302,7 @@ def is_safe_to_buy(mint_address: str, payment_sig: str) -> bool:
         not data.get("is_controlled")
         and data.get("cabal_score", 100) < 35
         and not data.get("time_sync")
-        and deployer_verdict not in ("SERIAL_RUGGER", "POOR_TRACK_RECORD")
+        and deployer_verdict not in ("SERIAL_RUGGER", "SERIAL_LAUNCHER", "POOR_TRACK_RECORD")
     )
 
 # In your bot's buy logic:
@@ -364,7 +364,7 @@ Drop a live safety badge into your own bot's dashboard — two lines of HTML, an
 <script src="https://api.cabal-hunter.com/widget.js" defer></script>
 ```
 
-It renders the 0–100 score, the plain-English verdict, and the active flags (bundled launch, coordinated dump, whale concentration, serial-rug deployer, honeypot). Add `data-refresh="120"` to re-scan live as you trade, and `data-api-key="..."` once you're past your free scans. Works anywhere — React, plain HTML, any site.
+It renders the 0–100 score, the plain-English verdict, and the active flags (bundled launch, coordinated dump, whale concentration, serial-launcher deployer, honeypot). Add `data-refresh="120"` to re-scan live as you trade, and `data-api-key="..."` once you're past your free scans. Works anywhere — React, plain HTML, any site.
 
 ---
 
@@ -416,7 +416,7 @@ Your endpoint receives:
 A group of wallets — often funded from the same source and buying in the same block — that quietly accumulate a large share of a token's supply before retail, then dump simultaneously into everyone who buys after launch.
 
 **How do I check if a Solana token is a rug?**
-Scan the mint with Cabal-Hunter (MCP, REST API, or the free bubble map). It traces holder funding back to shared sources, detects same-block bundle buys, flags serial-rug deployers and live coordinated dumps, and returns an **Exit-Liquidity Risk** verdict: `LOW`, `ELEVATED`, or `HIGH`.
+Scan the mint with Cabal-Hunter (MCP, REST API, or the free bubble map). It traces holder funding back to shared sources, detects same-block bundle buys, flags serial-launcher deployers and live coordinated dumps, and returns an **Exit-Liquidity Risk** verdict: `LOW`, `ELEVATED`, or `HIGH`.
 
 **Is it free?**
 Yes — 250 scans/month per IP, with no signup or API key. Beyond that it's $0.001 USDC per scan — which just covers the Helius RPC cost of the live trace — paid natively on Solana.
