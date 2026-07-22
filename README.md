@@ -2,7 +2,7 @@
 
 [![MCP server](https://img.shields.io/badge/MCP-server-7c3aed)](https://api.cabal-hunter.com/mcp)
 [![Solana](https://img.shields.io/badge/Solana-on--chain-14F195)](https://api.cabal-hunter.com)
-[![Live demo](https://img.shields.io/badge/%E2%96%B6%20live-bubble%20map-2dd4bf)](https://api.cabal-hunter.com/demo)
+[![Live demo](https://img.shields.io/badge/%E2%96%B6%20live-holder%20map-2dd4bf)](https://api.cabal-hunter.com/demo)
 [![Free tier](https://img.shields.io/badge/250%2Fmo%20free-then%20%240.001-ff4d6d)](https://api.cabal-hunter.com/api/info)
 [![Install MCP in VS Code](https://img.shields.io/badge/VS_Code-One--click_MCP_install-0098FF?logo=githubcopilot&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=cabal-hunter&config=%7B%22type%22%3A%20%22http%22%2C%20%22url%22%3A%20%22https%3A%2F%2Fapi.cabal-hunter.com%2Fmcp%22%7D)
 [![Install MCP in Cursor](https://img.shields.io/badge/Cursor-One--click_MCP_install-111111)](https://cursor.com/install-mcp?name=cabal-hunter&config=eyJ1cmwiOiAiaHR0cHM6Ly9hcGkuY2FiYWwtaHVudGVyLmNvbS9tY3AifQ==)
@@ -11,14 +11,14 @@
 
 > 🌐 **Available in 9 languages:** [English](https://api.cabal-hunter.com/) · [Español](https://api.cabal-hunter.com/es) · [Português](https://api.cabal-hunter.com/pt) · [Français](https://api.cabal-hunter.com/fr) · [Deutsch](https://api.cabal-hunter.com/de) · [Nederlands](https://api.cabal-hunter.com/nl) · [中文](https://api.cabal-hunter.com/zh) · [日本語](https://api.cabal-hunter.com/ja) · [한국어](https://api.cabal-hunter.com/ko)
 
-![Cabal-Hunter — live Solana cabal and rug analysis: bubble map, serial-launcher deployer history, and an Exit-Liquidity Risk verdict](demo/screenshot.png)
+![Cabal-Hunter — live Solana cabal and rug analysis: interactive 3D holder map, serial-launcher deployer history, and an Exit-Liquidity Risk verdict](demo/screenshot.png)
 
 > Stop your AI trading agents getting rugged by coordinated wallet cabals.
 > Drop-in template for Claude Code, Cursor, and ElizaOS.
 
-**▶ Try it now: [live bubble map of any Solana token →](https://api.cabal-hunter.com/demo)** — no signup.
+**▶ Try it now: [live 3D holder map of any Solana token →](https://api.cabal-hunter.com/demo)** — no signup.
 
-**Cabal-Hunter is a free on-chain Solana token safety scanner and rug checker.** It detects coordinated wallet cabals, same-block Jito bundle buys, serial-launcher deployers and coordinated dumps on any Solana mint (pump.fun, PumpSwap, Raydium) — and answers the one question that matters before you ape: *are you the exit liquidity?* Use it via **MCP** (Claude, Cursor, ElizaOS), a **REST API**, or a free **visual bubble map**.
+**Cabal-Hunter is a free on-chain Solana token safety scanner and rug checker.** It detects coordinated wallet cabals, same-block Jito bundle buys, serial-launcher deployers and coordinated dumps on any Solana mint (pump.fun, PumpSwap, Raydium) — and answers the one question that matters before you ape: *are you the exit liquidity?* Use it via **MCP** (Claude, Cursor, ElizaOS), a **REST API**, or a free **interactive 3D holder map**.
 
 ---
 
@@ -314,15 +314,15 @@ else:
 
 ---
 
-## Visual Bubble Map (Free)
+## Interactive 3D Holder Map (Free)
 
-See exactly what the analysis found — coloured clusters, funding connections, holder distribution:
+See exactly what the analysis found. Every real holder is a faceted crystal sized by its share of supply; wallets in the same cluster are joined by light beams, and the liquidity pool and locked supply sit apart in a wireframe vault because they cannot be sold. Drag to rotate, hover for the wallet, click through to Solscan:
 
 ```
 https://api.cabal-hunter.com/map?mint=ANY_SOLANA_MINT
 ```
 
-Free to view. Share this URL when you catch a rug. Every holder bubble is clickable and links to Solscan for deep-dive research.
+Free to view, in 9 languages. Share this URL when you catch a rug. Every crystal is clickable and links to Solscan for deep-dive research.
 
 ---
 
@@ -374,7 +374,7 @@ It renders the 0–100 score, the plain-English verdict, and the active flags (b
 |----------|-------------|------|
 | `POST /api/scan-cabal` | Full cabal analysis | $0.001 USDC |
 | `GET /api/scan-cabal?mintAddress=` | GET version | $0.001 USDC |
-| `GET /map?mint=` | Visual bubble map | Free |
+| `GET /map?mint=` | Interactive 3D holder map | Free |
 | `GET /api/cex-funding?mint=` | Per-exchange funding breakdown (which CEXes funded holders, % each) | Free |
 | `GET /api/trade-analysis?mint=` | Cohort PnL (Team/Snipers/Insiders) + wash-trading score + exit-liquidity price impact, one call | Free |
 | `POST /api/watch` | Register an emergency dump webhook for a mint (push on dump/rug start) | Free |
@@ -416,7 +416,7 @@ Your endpoint receives:
 A group of wallets — often funded from the same source and buying in the same block — that quietly accumulate a large share of a token's supply before retail, then dump simultaneously into everyone who buys after launch.
 
 **How do I check if a Solana token is a rug?**
-Scan the mint with Cabal-Hunter (MCP, REST API, or the free bubble map). It traces holder funding back to shared sources, detects same-block bundle buys, flags serial-launcher deployers and live coordinated dumps, and returns an **Exit-Liquidity Risk** verdict: `LOW`, `ELEVATED`, or `HIGH`.
+Scan the mint with Cabal-Hunter (MCP, REST API, or the free 3D holder map). It traces holder funding back to shared sources, detects same-block bundle buys, flags serial-launcher deployers and live coordinated dumps, and returns an **Exit-Liquidity Risk** verdict: `LOW`, `ELEVATED`, or `HIGH`.
 
 **Is it free?**
 Yes — 250 scans/month per IP, with no signup or API key. Beyond that it's $0.001 USDC per scan — which just covers the Helius RPC cost of the live trace — paid natively on Solana.
