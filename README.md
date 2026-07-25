@@ -65,10 +65,14 @@ Token mint address
    dumped and the sell transactions linked. Same-slot + meaningful-size +
    distinct wallets = near-zero false positives.
       ↓
-4. DEPLOYER TRACK RECORD — the creator wallet is resolved on-chain
-   (bonding curve pre-graduation, pump-amm pool after — works on any
-   age token), their full launch history pulled, and every previous
-   token checked: alive or dead?
+4. DEV TRACK RECORD — the creator wallet is resolved on-chain (bonding
+   curve pre-graduation, pump-amm pool after — works on any age token),
+   and their full launch history is pulled WITH THE PEAK MARKET CAP each
+   past token hit. A dead-count alone hides a pump-and-dump: a dev whose
+   tokens all died at $4k is a nobody, but one who ran a token to $728k
+   then dumped it to dust has done it to holders before. Reputation:
+   SERIAL_RUGGER | DEAD_ON_ARRIVAL | MIXED | PROVEN, with per-launch
+   peak → now (paid tier returns the full launches[] array).
       ↓
 5. CEX-NOISE FILTER — holders funded from a shared exchange or
    high-volume infra wallet are NOT a cabal. They're excluded from the
@@ -89,7 +93,7 @@ Returns: Cabal Score (0-100) + cluster map + deployer verdict
          + honeypot verdict + on-chain receipts + hard verdict
 ```
 
-The deployer layer is the one cabals can't dodge: **wallets rotate, deployers leave a paper trail.** A response of `"deployer": {"verdict": "SERIAL_LAUNCHER", "tokens_launched": 14, "dead": 13}` shows you the dev's full track record before the first candle. (Honest context: most prolific pump.fun creators have high dead-token rates, so this signal is capped — it flags a token for review but never drives a HIGH verdict on its own.)
+The deployer layer is the one cabals can't dodge: **wallets rotate, deployers leave a paper trail.** A response of `"deployer": {"reputation": "SERIAL_RUGGER", "tokens_launched": 22, "best_peak_usd": 728432, "pump_and_dumps": 2}` shows the dev's full track record before the first candle — including whether this "dead" dev has quietly run tokens to six figures and dumped them on holders before. (Honest context: most prolific pump.fun creators have high dead-token rates, so this signal is capped — it flags a token for review but never drives a HIGH verdict on its own.)
 
 **Receipts, not magic.** Every cluster and red flag links to the underlying Solscan transaction (`evidence_txs[]`, `holders[].funding_tx`) — verify the trail yourself instead of trusting a score.
 
