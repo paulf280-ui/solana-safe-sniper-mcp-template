@@ -1,6 +1,6 @@
 {
   "name": "cabal-hunter-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Local stdio MCP server for Cabal-Hunter — on-chain Solana token cabal & rug detection. Proxies to api.cabal-hunter.com.",
   "type": "module",
   "bin": {
