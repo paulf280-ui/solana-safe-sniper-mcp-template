@@ -28,11 +28,11 @@ Your autonomous trading agent is reading rug.check scores, liquidity locks, and 
 
 **None of that catches a cabal.**
 
-A cabal is 15 fresh wallets — all funded from the same master wallet, all buying in the first 90 seconds of launch — quietly accumulating 25-40% of supply before your bot sees the first candle. Contract clean. LP burned. Everything green.
+A handful of wallets take the bottom of a launch, the chart looks clean — contract fine, LP burned, everything green — and then they sell into whoever bought after them. You are the exit liquidity.
 
-Then they dump. Simultaneously. Into your liquidity.
+This template integrates **[Cabal-Hunter](https://api.cabal-hunter.com)** as a pre-trade safety check, so your agent can see who is holding and who has already positioned to sell before it signs a swap.
 
-This template integrates **[Cabal-Hunter](https://api.cabal-hunter.com)** — a live on-chain funding tracer — as a pre-trade safety check so your agent catches coordinated launches before it signs a swap.
+> **A note on what we do and don't claim.** This README used to open with "15 fresh wallets funded from the same master wallet, accumulating 25-40% of supply." We went looking for that pattern and could not find it. Tracing 323 pump.fun launches at the bonding curve turned up **zero coordinated funding clusters**, and showed why: the median launch has about **five successful buyers**, because on one representative token **1,260 of the curve's 1,266 transactions failed**. Launch capture is a sniper *race* between competing bots, not a quiet cabal. The detection layers below are the ones we can actually evidence — holder concentration, same-block bundles, coordinated selling and deployer history. The pre-launch funding tracer was withdrawn; the [full write-up is here](https://github.com/paulf280-ui/cabal-hunter-mcp#a-note-on-the-withdrawn-trace_funding-tool).
 
 ---
 
@@ -50,9 +50,14 @@ Token mint address
    rug dev) into LOW | ELEVATED | HIGH: are insiders set up to dump on
    a buyer? The one number a trading agent needs.
       ↓
-1. FUNDING TRACE — top holders walked back to launch: who was funded
-   by the same source wallet? (classic cabal signature). Every cluster
-   carries evidence_txs[] — the actual funding transactions on Solscan.
+1. HOLDER FUNDING LINEAGE — the CURRENT top holders walked back: were
+   they seeded by the same wallet? Only System-owned accounts count as
+   a funder, so pools, vaults and routers can never be mistaken for a
+   person (that mistake is exactly what got our pre-launch tracer
+   withdrawn). Every cluster carries evidence_txs[] — the actual
+   funding transactions on Solscan. This layer is genuinely rare to
+   fire; treat a hit as significant and its absence as no evidence
+   either way.
       ↓
 2. SAME-BLOCK BUNDLE DETECTION — holders whose token accounts were
    created in the EXACT same slot bought in one Jito bundle. Catches
