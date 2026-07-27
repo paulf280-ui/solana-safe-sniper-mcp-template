@@ -358,7 +358,7 @@ After that, pick whatever matches how hard your bot works (priced at cost — it
 
 Prepaid keys: send USDC once → `POST /api/buy-key` with the tx signature → use header `X-API-Key` on every scan. Or pay per-call via x402 (`X-Payment-Signature` header). No credit card, no account, no lock-in.
 
-**Does it pay for itself?** A bot sniping $1 positions loses ~$40/month to rugs it never saw coming — rugs are the #1 way snipers bleed money. Cabal-Hunter flags them _before_ the buy. Dodge just 9 and the Unlimited tier has already paid for itself; every rug after that is capital back in your pocket, redeployed into trades that can actually run.
+**Does it pay for itself?** Work it out with your own numbers rather than ours: the Unlimited tier is $9 a month, so it pays for itself the first time it keeps you out of a position bigger than $9 that goes to zero. Whether that happens once a month or once a week depends on what you trade and how often — we are not going to invent an average for you.
 
 Payment is native on Solana — no credit card, no account, no subscription lock-in.
 
