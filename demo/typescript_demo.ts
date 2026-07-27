@@ -2,8 +2,9 @@
  * Cabal-Hunter API demo — TypeScript/Node.js
  * Checks a Solana token for coordinated wallet clusters before buying.
  *
- * First 100 queries/month are FREE — no payment required.
- * After that: $0.05 USDC per query via X-Payment-Signature header.
+ * First 250 scans/month are FREE — no signup, no payment required.
+ * After that: $9/month unlimited, or $0.001 USDC per scan via x402
+ * (X-Payment-Signature header).
  *
  * Run:  npx tsx demo/typescript_demo.ts
  */

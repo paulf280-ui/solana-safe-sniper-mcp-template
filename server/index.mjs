@@ -10,9 +10,10 @@
  * pump-and-dump history) and live coordinated dumps on any Solana mint before it
  * signs a swap.
  *
- * Free tier: 100 scans/month. Beyond that, scans are $0.02 USDC via x402 on
- * Solana — when a scan needs payment the API returns HTTP 402 with the payment
- * instructions, which this tool surfaces to the caller.
+ * Free tier: 250 scans/month per IP, no signup. Beyond that it is $9/month
+ * unlimited (fair use), or $0.001 USDC per scan via x402 on Solana — when a
+ * scan needs payment the API returns HTTP 402 with the payment instructions,
+ * which this tool surfaces to the caller.
  *
  * Uses the low-level Server API + JSON-Schema tool definitions for maximum
  * compatibility across @modelcontextprotocol/sdk versions.
