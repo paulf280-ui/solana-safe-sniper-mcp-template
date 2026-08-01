@@ -1,7 +1,7 @@
 {
   "name": "cabal-hunter-mcp",
-  "version": "1.0.1",
-  "description": "Local stdio MCP server for Cabal-Hunter — on-chain Solana token cabal & rug detection. Proxies to api.cabal-hunter.com.",
+  "version": "1.0.2",
+  "description": "MCP server for Cabal-Hunter \u2014 Solana token rug & cabal detection for AI agents. Wallet clusters, same-block bundles, deployer track record with peak market caps, honeypot and authority traps. 250 free scans/month, no signup.",
   "type": "module",
   "bin": {
     "cabal-hunter-mcp": "server/index.mjs"
@@ -24,5 +24,10 @@
     "trading",
     "model-context-protocol"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paulf280-ui/solana-safe-sniper-mcp-template.git"
+  },
+  "homepage": "https://api.cabal-hunter.com"
 }
