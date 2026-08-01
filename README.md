@@ -40,7 +40,7 @@ This template integrates **[Cabal-Hunter](https://api.cabal-hunter.com)** as a p
 
 The classic pump.fun exit-liquidity setup: wallets positioned before the crowd take the bottom of a launch, then dump on the retail (and bots) that pile in after. Cabal-Hunter's headline output is a single **Exit-Liquidity Risk** verdict (`LOW | ELEVATED | HIGH`) that synthesises every signal below into the only thing that matters before you sign a swap: *are the insiders positioned to dump on you?*
 
-## What Cabal-Hunter Does — Seven Detection Layers
+## What Cabal-Hunter Does
 
 ```
 Token mint address
