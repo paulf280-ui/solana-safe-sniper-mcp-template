@@ -2,8 +2,9 @@
 Cabal-Hunter API demo — Python
 Checks a Solana token for coordinated wallet clusters before buying.
 
-First 100 queries/month are FREE — no payment required.
-After that: $0.05 USDC per query via X-Payment-Signature header.
+First 250 scans/month are FREE — no signup, no API key, no payment.
+After that: $0.001 USDC per scan via X-Payment-Signature, or a prepaid
+key ($9/month unlimited, fair use 50k) via X-API-Key.
 
 Run:  python demo/python_demo.py
 """
@@ -20,7 +21,8 @@ DEMO_MINT = "Axpzs7FEMYzpcfqVcDjDMQb2rsgMYVJADNpUZe7bpump"
 def check_token(mint: str) -> dict:
     """
     Query Cabal-Hunter for a token.
-    Free for first 100 queries/month. After that, pass X-Payment-Signature.
+    Free for the first 250 scans/month. After that, pass X-Payment-Signature
+    or X-API-Key.
     """
     resp = requests.post(API, json={"mintAddress": mint}, timeout=30)
 
@@ -54,7 +56,7 @@ if __name__ == "__main__":
 
     free_left = report.get("free_queries_remaining")
     if free_left is not None:
-        print(f"✅ Free tier — {free_left} free queries remaining this month\n")
+        print(f"✅ Free tier — {free_left} free scans remaining this month\n")
 
     print(f"Token:       {report.get('token_name', '?')}")
     print(f"Risk:        {report.get('risk')}")

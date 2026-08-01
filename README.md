@@ -170,7 +170,7 @@ Your agent will call `check_cabal_risk(mintAddress)` before any swap and abort i
 
 ### 4. Direct REST API
 
-For headless scripts, custom bots, or any language. **The first 100 calls/month are free — no key, no signup.** Just call it:
+For headless scripts, custom bots, or any language. **The first 250 calls/month are free — no key, no signup.** Just call it:
 
 ```bash
 curl "https://api.cabal-hunter.com/api/scan-cabal?mintAddress=YOUR_MINT_ADDRESS"

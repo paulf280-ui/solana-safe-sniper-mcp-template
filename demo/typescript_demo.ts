@@ -67,7 +67,7 @@ async function main() {
   if (!report) process.exit(1)
 
   if (report.free_queries_remaining !== undefined) {
-    console.log(`✅ Free tier — ${report.free_queries_remaining} free queries remaining this month\n`)
+    console.log(`✅ Free tier — ${report.free_queries_remaining} free scans remaining this month\n`)
   }
 
   console.log(`Token:       ${report.token_name}`)
