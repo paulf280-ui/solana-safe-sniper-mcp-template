@@ -3,7 +3,7 @@
 [![MCP server](https://img.shields.io/badge/MCP-server-7c3aed)](https://api.cabal-hunter.com/mcp)
 [![Solana](https://img.shields.io/badge/Solana-on--chain-14F195)](https://api.cabal-hunter.com)
 [![Live demo](https://img.shields.io/badge/%E2%96%B6%20live-holder%20map-2dd4bf)](https://api.cabal-hunter.com/demo)
-[![Free tier](https://img.shields.io/badge/250%2Fmo%20free-then%20%240.001-ff4d6d)](https://api.cabal-hunter.com/api/info)
+[![Free tier](https://img.shields.io/badge/5%2Fmo%20free-250%20with%20a%20key-ff4d6d)](https://api.cabal-hunter.com/api/info)
 [![Install MCP in VS Code](https://img.shields.io/badge/VS_Code-One--click_MCP_install-0098FF?logo=githubcopilot&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=cabal-hunter&config=%7B%22type%22%3A%20%22http%22%2C%20%22url%22%3A%20%22https%3A%2F%2Fapi.cabal-hunter.com%2Fmcp%22%7D)
 [![Install MCP in Cursor](https://img.shields.io/badge/Cursor-One--click_MCP_install-111111)](https://cursor.com/install-mcp?name=cabal-hunter&config=eyJ1cmwiOiAiaHR0cHM6Ly9hcGkuY2FiYWwtaHVudGVyLmNvbS9tY3AifQ==)
 [![ElizaOS plugin](https://img.shields.io/badge/ElizaOS-plugin--cabal--hunter-7c3aed)](https://github.com/paulf280-ui/plugin-cabal-hunter)
@@ -104,7 +104,7 @@ The deployer layer is the one cabals can't dodge: **wallets rotate, deployers le
 
 **Response in <100ms** on pre-indexed tokens — every pump.fun graduation is scanned and cached automatically as it happens.
 
-**Free tier: 250 scans/month per IP.** Then $0.001 USDC per scan — priced at cost (it covers the Helius RPC calls behind each live on-chain trace), paid natively on Solana. No account. No API key. No subscription.
+**Free tier: 5 scans/month with no account, or 250/month with a free key (one email).** Then $0.001 per scan — priced at cost (it covers the Helius RPC calls behind each live on-chain trace). Pay by card, in USDC on Solana, or via x402 — same price through every door. $9/month buys unlimited fair-use scans; by card that renews automatically and can be cancelled anytime at [cabal-hunter.com/billing](https://cabal-hunter.com/billing).
 
 ---
 
