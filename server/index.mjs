@@ -10,7 +10,7 @@
  * pump-and-dump history) and live coordinated dumps on any Solana mint before it
  * signs a swap.
  *
- * Free tier: 250 scans/month per IP, no signup. Beyond that it is $9/month
+ * Free tier: 5 scans/month, no signup — 250/month with a free key (one email). Beyond that it is $9/month
  * unlimited (fair use), or $0.001 USDC per scan via x402 on Solana — when a
  * scan needs payment the API returns HTTP 402 with the payment instructions,
  * which this tool surfaces to the caller.

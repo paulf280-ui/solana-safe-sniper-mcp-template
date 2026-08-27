@@ -170,7 +170,7 @@ Your agent will call `check_cabal_risk(mintAddress)` before any swap and abort i
 
 ### 4. Direct REST API
 
-For headless scripts, custom bots, or any language. **The first 250 calls/month are free — no key, no signup.** Just call it:
+For headless scripts, custom bots, or any language. **The first 5 calls/month are free — no key, no signup.** A free key (one email) raises that to 250/month. Just call it:
 
 ```bash
 curl "https://api.cabal-hunter.com/api/scan-cabal?mintAddress=YOUR_MINT_ADDRESS"
@@ -347,7 +347,7 @@ Same detection engine, wherever your stack lives:
 
 ## Pricing
 
-**First 250 scans every month are free** — per IP, no signup, no API key.
+**First 5 scans every month are free** — no signup, no API key. A free key (one email) raises that to 250/month.
 
 After that, pick whatever matches how hard your bot works (priced at cost — it covers the Helius RPC behind each live on-chain trace):
 
@@ -428,7 +428,7 @@ A group of wallets — often funded from the same source and buying in the same 
 Scan the mint with Cabal-Hunter (MCP, REST API, or the free 3D holder map). It traces holder funding back to shared sources, detects same-block bundle buys, flags serial-launcher deployers and live coordinated dumps, and returns an **Exit-Liquidity Risk** verdict: `LOW`, `ELEVATED`, or `HIGH`.
 
 **Is it free?**
-Yes — 250 scans/month per IP, with no signup or API key. Beyond that it's $0.001 USDC per scan — which just covers the Helius RPC cost of the live trace — paid natively on Solana.
+Yes — 5 scans/month with no signup or API key, and 250/month with a free key (one email). Beyond that it's $0.001 USDC per scan — which just covers the Helius RPC cost of the live trace — paid natively on Solana.
 
 **Can AI trading agents use it?**
 Yes — that's the whole point. The MCP server (`api.cabal-hunter.com/mcp`) lets Claude, Cursor and ElizaOS agents call `check_cabal_risk(mintAddress)` automatically before any swap, and a REST API covers any other language.
