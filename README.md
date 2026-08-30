@@ -18,7 +18,7 @@
 
 **▶ Try it now: [live 3D holder map of any Solana token →](https://api.cabal-hunter.com/demo)** — no signup.
 
-**Cabal-Hunter is a free on-chain Solana token safety scanner and rug checker.** It detects coordinated wallet cabals, same-block Jito bundle buys, serial-launcher deployers and coordinated dumps on any Solana mint (pump.fun, PumpSwap, Raydium) — and answers the one question that matters before you ape: *are you the exit liquidity?* Use it via **MCP** (Claude, Cursor, ElizaOS), a **REST API**, or a free **interactive 3D holder map**.
+**Cabal-Hunter is a free on-chain Solana token safety scanner and rug checker.** It detects coordinated wallet cabals, same-block Jito bundle buys, serial-launcher deployers and coordinated dumps on any Solana mint (pump.fun, PumpSwap, Raydium, Orca, Meteora) — and answers the one question that matters before you ape: *are you the exit liquidity?* Use it via **MCP** (Claude, Cursor, ElizaOS), a **REST API**, or a free **interactive 3D holder map**.
 
 ---
 
@@ -73,7 +73,11 @@ Token mint address
 4. DEV TRACK RECORD — the creator wallet is resolved on-chain (bonding
    curve pre-graduation, pump-amm pool after — works on any age token),
    and their full launch history is pulled WITH THE PEAK MARKET CAP each
-   past token hit. A dead-count alone hides a pump-and-dump: a dev whose
+   past token hit. Launch detection is venue-agnostic: pump.fun, Raydium,
+   Orca, Meteora and PumpSwap. A launch is only counted where the
+   transaction actually CREATED the mint, so minting more supply of a
+   token that already exists is never miscounted as a launch.
+   A dead-count alone hides a pump-and-dump: a dev whose
    tokens all died at $4k is a nobody, but one who ran a token to $728k
    then dumped it to dust has done it to holders before. Reputation:
    SERIAL_RUGGER | DEAD_ON_ARRIVAL | MIXED | PROVEN, with per-launch
@@ -99,6 +103,12 @@ Returns: Cabal Score (0-100) + cluster map + deployer verdict
 ```
 
 The deployer layer is the one cabals can't dodge: **wallets rotate, deployers leave a paper trail.** A response of `"deployer": {"reputation": "SERIAL_RUGGER", "tokens_launched": 22, "best_peak_usd": 728432, "pump_and_dumps": 2}` shows the dev's full track record before the first candle — including whether this "dead" dev has quietly run tokens to six figures and dumped them on holders before. (Honest context: most prolific pump.fun creators have high dead-token rates, so this signal is capped — it flags a token for review but never drives a HIGH verdict on its own.)
+
+**`FIRST_LAUNCH` and `UNKNOWN` are not the same answer.** `deployer.verdict` of
+`FIRST_LAUNCH` means we walked this creator's history and found no earlier tokens.
+`UNKNOWN` means the history could not be established at all — that is an absence of
+evidence, not a clean record, and an agent must not treat it as one. Where a deployer
+cannot be resolved the scan says so in words rather than returning a confident silence.
 
 **Receipts, not magic.** Every cluster and red flag links to the underlying Solscan transaction (`evidence_txs[]`, `holders[].funding_tx`) — verify the trail yourself instead of trusting a score.
 
