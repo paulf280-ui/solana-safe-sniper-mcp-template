@@ -7,7 +7,7 @@
  * Drop it into any MCP client (Claude Desktop, Cursor, ElizaOS) to give an agent
  * a pre-trade safety check that catches coordinated wallet cabals, same-block
  * Jito bundles, the dev's launch track record (peak market cap per past token +
- * pump-and-dump history) and live coordinated dumps on any Solana mint before it
+ * pump-and-dump history) and same-block coordinated selling on any Solana mint before it
  * signs a swap.
  *
  * Free tier: 5 scans/month, no signup — 250/month with a free key (one email). Beyond that it is $9/month
@@ -38,7 +38,7 @@ const CHECK_CABAL_RISK = {
   description:
     "Scan a Solana token mint for coordinated wallet cabals, same-block Jito " +
     "bundle buys, the dev's launch track record (peak market cap per past token " +
-    "+ pump-and-dump history) and live coordinated dumps. Returns an " +
+    "+ pump-and-dump history) and same-block coordinated selling. Returns an " +
     "Exit-Liquidity Risk verdict (cabal_score 0-100, risk level, is_controlled, " +
     "coordinated wallet clusters) so a trading agent can decide whether it is " +
     "about to become exit liquidity BEFORE it signs a swap. Works on pump.fun, " +

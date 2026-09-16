@@ -18,7 +18,7 @@
 
 **▶ Try it now: [live 3D holder map of any Solana token →](https://api.cabal-hunter.com/demo)** — no signup.
 
-**Cabal-Hunter is a free on-chain Solana token safety scanner and rug checker.** It detects coordinated wallet cabals, same-block Jito bundle buys, serial-launcher deployers and coordinated dumps on any Solana mint (pump.fun, PumpSwap, Raydium, Orca, Meteora) — and answers the one question that matters before you ape: *are you the exit liquidity?* Use it via **MCP** (Claude, Cursor, ElizaOS), a **REST API**, or a free **interactive 3D holder map**.
+**Cabal-Hunter is a free on-chain Solana token safety scanner and rug checker.** It detects coordinated wallet cabals, same-block Jito bundle buys, serial-launcher deployers and same-block coordinated selling on any Solana mint (pump.fun, PumpSwap, Raydium, Orca, Meteora) — and answers the one question that matters before you ape: *are you the exit liquidity?* Use it via **MCP** (Claude, Cursor, ElizaOS), a **REST API**, or a free **interactive 3D holder map**.
 
 ---
 
@@ -38,7 +38,7 @@ This template integrates **[Cabal-Hunter](https://api.cabal-hunter.com)** as a p
 
 ## The one question it answers: are YOU the exit liquidity?
 
-The classic pump.fun exit-liquidity setup: wallets positioned before the crowd take the bottom of a launch, then dump on the retail (and bots) that pile in after. Cabal-Hunter's headline output is a single **Exit-Liquidity Risk** verdict (`LOW | ELEVATED | HIGH`) that synthesises every signal below into the only thing that matters before you sign a swap: *are the insiders positioned to dump on you?*
+The classic pump.fun exit-liquidity setup: wallets positioned before the crowd take the bottom of a launch, then dump on the retail (and bots) that pile in after. Cabal-Hunter's headline output is a single **Exit-Liquidity Risk** verdict — `risk_level`, one of `LOW_SIGNAL | ELEVATED | HIGH` that synthesises every signal below into the only thing that matters before you sign a swap: *are the insiders positioned to dump on you?*
 
 ## What Cabal-Hunter Does
 
@@ -46,12 +46,14 @@ The classic pump.fun exit-liquidity setup: wallets positioned before the crowd t
 Token mint address
       ↓
 0. EXIT-LIQUIDITY RISK — the headline verdict. Synthesises the layers
-   below (bundle, concentration, shared funder, coordinated dump, serial-
-   rug dev) into LOW | ELEVATED | HIGH: are insiders set up to dump on
-   a buyer? The one number a trading agent needs.
+   below (bundle, concentration, shared funder, coordinated selling,
+   serial-launcher dev) into risk_level: LOW_SIGNAL | ELEVATED | HIGH.
+   Are insiders set up to dump on a buyer? The one field an agent needs.
       ↓
-1. HOLDER FUNDING LINEAGE — the CURRENT top holders walked back: were
-   they seeded by the same wallet? Only System-owned accounts count as
+1. HOLDER FUNDING TRACE (ONE HOP) — the CURRENT top holders walked back
+   one funding hop: were they seeded by the same wallet? ONE hop, not a
+   lineage — we do not claim to follow money through a chain of
+   wallets. Only System-owned accounts count as
    a funder, so pools, vaults and routers can never be mistaken for a
    person (that mistake is exactly what got our pre-launch tracer
    withdrawn). Every cluster carries evidence_txs[] — the actual
@@ -64,24 +66,33 @@ Token mint address
    stealth launches that route funding through intermediaries to
    evade layer 1. Returned as `time_sync: true`.
       ↓
-3. COORDINATED DUMP DETECTION — ≥2 holders that SOLD a meaningful chunk
-   (≥25% of their bag each) in the EXACT same block — a cabal exiting in
-   real time. `coordinated_exit: true`, with sold_pct = % of supply
-   dumped and the sell transactions linked. Same-slot + meaningful-size +
-   distinct wallets = near-zero false positives.
+3. COORDINATED SELLING DETECTION — ≥2 holders that SOLD a meaningful
+   chunk (≥25% of their bag each) in the EXACT same block.
+   `coordinated_exit: true`, with sold_pct = % of supply sold and the
+   signatures in evidence_txs[]. Same-slot + meaningful-size + distinct
+   wallets = near-zero false positives. It reads the CURRENT holder set
+   at scan time, so a bundle that already sold and left the top holders
+   is not visible here — that is what the launch-block check is for.
+   For a token you already hold, POST /api/watch pushes you a webhook
+   the moment a dump or liquidity drain STARTS.
       ↓
 4. DEV TRACK RECORD — the creator wallet is resolved on-chain (bonding
    curve pre-graduation, pump-amm pool after — works on any age token),
-   and their full launch history is pulled WITH THE PEAK MARKET CAP each
-   past token hit. Launch detection is venue-agnostic: pump.fun, Raydium,
+   and their launch history is pulled WITH THE PEAK MARKET CAP each
+   past token hit. `sampled` says how many of those launches we actually
+   walked — a very prolific wallet is sampled, not exhausted, so read
+   `tokens_launched` as a floor, never as a complete history.
+   Launch detection is venue-agnostic: pump.fun, Raydium,
    Orca, Meteora and PumpSwap. A launch is only counted where the
    transaction actually CREATED the mint, so minting more supply of a
    token that already exists is never miscounted as a launch.
    A dead-count alone hides a pump-and-dump: a dev whose
    tokens all died at $4k is a nobody, but one who ran a token to $728k
    then dumped it to dust has done it to holders before. Reputation:
-   SERIAL_RUGGER | DEAD_ON_ARRIVAL | MIXED | PROVEN, with per-launch
-   peak → now (paid tier returns the full launches[] array).
+   FIRST_LAUNCH | PROVEN | MIXED | DEAD_ON_ARRIVAL | SERIAL_RUGGER |
+   UNKNOWN, with per-launch peak → now (paid tier returns the full
+   launches[] array). UNKNOWN means the history could not be
+   established — never read it as a clean record.
       ↓
 5. CEX-NOISE FILTER — holders funded from a shared exchange or
    high-volume infra wallet are NOT a cabal. They're excluded from the
@@ -110,9 +121,9 @@ The deployer layer is the one cabals can't dodge: **wallets rotate, deployers le
 evidence, not a clean record, and an agent must not treat it as one. Where a deployer
 cannot be resolved the scan says so in words rather than returning a confident silence.
 
-**Receipts, not magic.** Every cluster and red flag links to the underlying Solscan transaction (`evidence_txs[]`, `holders[].funding_tx`) — verify the trail yourself instead of trusting a score.
+**Receipts, not magic.** Every wallet cluster carries `evidence_txs[]` — the raw signatures behind that cluster, checkable on Solscan, and holders carry `funding_tx` where we resolved one. Holder concentration, deployer history and the honeypot checks are read from chain state, so they carry no transaction of their own: a token can come back `HIGH` with no clusters at all. Verify what is there rather than trusting a score.
 
-**Response in <100ms** on pre-indexed tokens — every pump.fun graduation is scanned and cached automatically as it happens.
+**Response in <100ms** for a mint traced in the last 8 hours — `computed_at` (unix seconds) says exactly when that trace ran. Any other mint runs a live on-chain trace and takes 15-20s, so allow a 30s timeout.
 
 **Free tier: 5 scans/month with no account, or 250/month with a free key (one email).** Then $0.001 per scan — priced at cost (it covers the Helius RPC calls behind each live on-chain trace). Pay by card, in USDC on Solana, or via x402 — same price through every door. $9/month buys unlimited fair-use scans; by card that renews automatically and can be cancelled anytime at [cabal-hunter.com/billing](https://cabal-hunter.com/billing).
 
@@ -383,7 +394,7 @@ Drop a live safety badge into your own bot's dashboard — two lines of HTML, an
 <script src="https://api.cabal-hunter.com/widget.js" defer></script>
 ```
 
-It renders the 0–100 score, the plain-English verdict, and the active flags (bundled launch, coordinated dump, whale concentration, serial-launcher deployer, honeypot). Add `data-refresh="120"` to re-scan live as you trade, and `data-api-key="..."` once you're past your free scans. Works anywhere — React, plain HTML, any site.
+It renders the 0–100 score, the plain-English verdict, and the active flags (bundled launch, coordinated selling, whale concentration, serial-launcher deployer, honeypot). Add `data-refresh="120"` to re-scan live as you trade, and `data-api-key="..."` once you're past your free scans. Works anywhere — React, plain HTML, any site.
 
 ---
 
@@ -398,6 +409,8 @@ It renders the 0–100 score, the plain-English verdict, and the active flags (b
 | `GET /api/trade-analysis?mint=` | Cohort PnL (Team/Snipers/Insiders) + wash-trading score + exit-liquidity price impact, one call | Free |
 | `POST /api/watch` | Register an emergency dump webhook for a mint (push on dump/rug start) | Free |
 | `GET /api/info` | Pricing, endpoints | Free |
+| `GET /health` | Uptime check | Free |
+| `POST /mcp` | MCP tool endpoint | $0.001 USDC per call |
 
 ### Emergency dump webhook (auto-exit)
 
@@ -415,16 +428,16 @@ Your endpoint receives:
   "coordinated": true, "price_usd": 0.0001, "liquidity_usd": 4200,
   "action":"consider_immediate_exit", "ts": 1781370000 }
 ```
-| `GET /health` | Uptime check | Free |
-| `POST /mcp` | MCP tool endpoint | $0.001 USDC per call |
 
 ---
 
 ## Infrastructure
 
-- **RPC**: Dedicated Helius node (Frankfurt) — fastest Solana data available
+- **RPC**: Helius (Frankfurt)
 - **Hosting**: AWS EC2 Frankfurt — low latency for EU/global
-- **Analysis**: Real on-chain data — no scrapers, no caches of cached caches
+- **Analysis**: read from the chain, never scraped from another scanner. A
+  completed trace is cached for 8 hours and `computed_at` always says when it
+  ran; `fresh=1` forces a new one
 - **Uptime**: 99.9% target — monitored, auto-restart via systemd
 
 ---
@@ -435,10 +448,13 @@ Your endpoint receives:
 A group of wallets — often funded from the same source and buying in the same block — that quietly accumulate a large share of a token's supply before retail, then dump simultaneously into everyone who buys after launch.
 
 **How do I check if a Solana token is a rug?**
-Scan the mint with Cabal-Hunter (MCP, REST API, or the free 3D holder map). It traces holder funding back to shared sources, detects same-block bundle buys, flags serial-launcher deployers and live coordinated dumps, and returns an **Exit-Liquidity Risk** verdict: `LOW`, `ELEVATED`, or `HIGH`.
+Scan the mint with Cabal-Hunter (MCP, REST API, or the free 3D holder map). It traces holder funding back one hop to shared sources, detects same-block bundle buys, flags serial-launcher deployers and same-block coordinated selling, and returns an **Exit-Liquidity Risk** verdict — `risk_level`: `LOW_SIGNAL`, `ELEVATED` or `HIGH`.
 
 **Is it free?**
 Yes — 5 scans/month with no signup or API key, and 250/month with a free key (one email). Beyond that it's $0.001 USDC per scan — which just covers the Helius RPC cost of the live trace — paid natively on Solana.
+
+**Is there a way to use it without writing code?**
+Yes — [@TheCabalHunter_Bot](https://t.me/TheCabalHunter_Bot) on Telegram. Paste a mint, get the same scan as a card, and ask it to watch a token you hold so it messages you when a dump starts. Scored tokens are posted to [@CabalHunterAlerts](https://t.me/CabalHunterAlerts).
 
 **Can AI trading agents use it?**
 Yes — that's the whole point. The MCP server (`api.cabal-hunter.com/mcp`) lets Claude, Cursor and ElizaOS agents call `check_cabal_risk(mintAddress)` automatically before any swap, and a REST API covers any other language.
@@ -451,4 +467,4 @@ MIT — fork it, build on it, integrate it. If you build something with this, sh
 
 ---
 
-*Built by [PF Capital](https://api.cabal-hunter.com) · Powered by Helius · Contact: api.cabal-hunter.com/api/info*
+*Built by [Cabal Hunter](https://cabal-hunter.com) · Powered by Helius · Contact: api.cabal-hunter.com/api/info*
