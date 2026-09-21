@@ -6,7 +6,7 @@
  * and proxies to the hosted Cabal-Hunter API (https://api.cabal-hunter.com).
  * Drop it into any MCP client (Claude Desktop, Cursor, ElizaOS) to give an agent
  * a pre-trade safety check that catches coordinated wallet cabals, same-block
- * Jito bundles, the dev's launch track record (peak market cap per past token +
+ * same-slot bundles, the dev's launch track record (peak market cap per past token +
  * pump-and-dump history) and same-block coordinated selling on any Solana mint before it
  * signs a swap.
  *
@@ -36,7 +36,7 @@ const server = new Server(
 const CHECK_CABAL_RISK = {
   name: "check_cabal_risk",
   description:
-    "Scan a Solana token mint for coordinated wallet cabals, same-block Jito " +
+    "Scan a Solana token mint for coordinated wallet cabals, same-block " +
     "bundle buys, the dev's launch track record (peak market cap per past token " +
     "+ pump-and-dump history) and same-block coordinated selling. Returns an " +
     "Exit-Liquidity Risk verdict (cabal_score 0-100, risk level, is_controlled, " +

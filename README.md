@@ -18,7 +18,7 @@
 
 **▶ Try it now: [live 3D holder map of any Solana token →](https://api.cabal-hunter.com/demo)** — no signup.
 
-**Cabal-Hunter is a free on-chain Solana token safety scanner and rug checker.** It detects coordinated wallet cabals, same-block Jito bundle buys, serial-launcher deployers and same-block coordinated selling on any Solana mint (pump.fun, PumpSwap, Raydium, Orca, Meteora) — and answers the one question that matters before you ape: *are you the exit liquidity?* Use it via **MCP** (Claude, Cursor, ElizaOS), a **REST API**, or a free **interactive 3D holder map**.
+**Cabal-Hunter is a free on-chain Solana token safety scanner and rug checker.** It detects coordinated wallet cabals, same-block bundle buys, serial-launcher deployers and same-block coordinated selling on any Solana mint (pump.fun, PumpSwap, Raydium, Orca, Meteora) — and answers the one question that matters before you ape: *are you the exit liquidity?* Use it via **MCP** (Claude, Cursor, ElizaOS), a **REST API**, or a free **interactive 3D holder map**.
 
 ---
 
@@ -62,7 +62,8 @@ Token mint address
    either way.
       ↓
 2. SAME-BLOCK BUNDLE DETECTION — holders whose token accounts were
-   created in the EXACT same slot bought in one Jito bundle. Catches
+   created in the EXACT same slot - a Jito bundle is one way to do that, not
+   the only one. Catches
    stealth launches that route funding through intermediaries to
    evade layer 1. Returned as `time_sync: true`.
       ↓
