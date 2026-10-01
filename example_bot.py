@@ -1,8 +1,8 @@
 """
 Example: Integrate Cabal-Hunter into a Solana trading bot.
 Checks for coordinated wallet clusters before executing any swap.
-Cost: 250 scans/month free, then $0.001 USDC per check (or $9/month
-unlimited). Pays for itself the first time it blocks a rug.
+Cost: 250 scans/month free, then $0.01 USDC per check (or $9/month
+for 2,500 scans). Pays for itself the first time it blocks a rug.
 """
 
 import requests

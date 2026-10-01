@@ -3,8 +3,8 @@ Cabal-Hunter API demo — Python
 Checks a Solana token for coordinated wallet clusters before buying.
 
 First 5 scans/month are FREE — no signup, no API key. 250/month with a free key (one email).
-After that: $0.001 USDC per scan via X-Payment-Signature, or a prepaid
-key ($9/month unlimited, fair use 50k) via X-API-Key.
+After that: $0.01 USDC per scan via X-Payment-Signature, or a prepaid
+key ($9/month for 2,500 scans, or $99/month unlimited, fair use 50k) via X-API-Key.
 
 Run:  python demo/python_demo.py
 """

@@ -3,7 +3,7 @@
  * Checks a Solana token for coordinated wallet clusters before buying.
  *
  * First 5 scans/month are FREE — no signup. 250/month with a free key (one email).
- * After that: $9/month unlimited, or $0.001 USDC per scan via x402
+ * After that: $9/month for 2,500 scans, $99/month unlimited, or $0.01 USDC per scan via x402
  * (X-Payment-Signature header).
  *
  * Run:  npx tsx demo/typescript_demo.ts

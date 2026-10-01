@@ -126,7 +126,7 @@ cannot be resolved the scan says so in words rather than returning a confident s
 
 **Response in <100ms** for a mint traced in the last 8 hours — `computed_at` (unix seconds) says exactly when that trace ran. Any other mint runs a live on-chain trace and takes 15-20s, so allow a 30s timeout.
 
-**Free tier: 5 scans/month with no account, or 250/month with a free key (one email).** Then $0.001 per scan — priced at cost (it covers the Helius RPC calls behind each live on-chain trace). Pay by card, in USDC on Solana, or via x402 — same price through every door. $9/month buys unlimited fair-use scans; by card that renews automatically and can be cancelled anytime at [cabal-hunter.com/billing](https://cabal-hunter.com/billing).
+**Free tier: 5 scans/month with no account, or 250/month with a free key (one email).** Then $0.01 per scan. Pay by card, in USDC on Solana, or via x402 — same price through every door. $9/month buys 2,500 scans a month and $99/month buys unlimited fair-use scans (50,000 a month); by card a plan renews automatically and can be cancelled anytime at [cabal-hunter.com/billing](https://cabal-hunter.com/billing).
 
 ---
 
@@ -151,7 +151,7 @@ That's it. Claude will now call `check_cabal_risk` automatically when you ask it
 **Example prompt:**
 > "Before we buy into this token, check if there are any coordinated wallets: `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`"
 
-Claude calls the tool, pays $0.001 USDC from your connected wallet, and returns the full analysis.
+Claude calls the tool, pays $0.01 USDC from your connected wallet, and returns the full analysis.
 
 ---
 
@@ -200,7 +200,7 @@ curl "https://api.cabal-hunter.com/api/scan-cabal?mintAddress=YOUR_MINT_ADDRESS"
 
 You get the full analysis back immediately, with `free_queries_remaining` so you always know where you stand. Machine-readable contract: [`/openapi.json`](https://api.cabal-hunter.com/openapi.json).
 
-Once the free tier is used up, calls are $0.001 USDC via x402 — your agent just pays, no billing setup:
+Once the free tier is used up, calls are $0.01 USDC via x402 — your agent just pays, no billing setup:
 
 **Step 1 — Request analysis (get payment instructions):**
 ```bash
@@ -215,9 +215,9 @@ Response (HTTP 402):
   "error": "payment_required",
   "payment": {
     "recipient": "ATYjZ1kWoHWhj74umGJ8wFqUeW1yeSGBbLi1UQpahPxt",
-    "amount_usdc": 0.001,
+    "amount_usdc": 0.01,
     "memo_required": "ch-xxxx-xxxx-xxxx",
-    "instructions": "Send 0.001 USDC with this memo, then resubmit with X-Payment-Signature header"
+    "instructions": "Send 0.01 USDC with this memo, then resubmit with X-Payment-Signature header"
   }
 }
 ```
@@ -371,16 +371,17 @@ Same detection engine, wherever your stack lives:
 
 **First 5 scans every month are free** — no signup, no API key. A free key (one email) raises that to 250/month.
 
-After that, pick whatever matches how hard your bot works (priced at cost — it covers the Helius RPC behind each live on-chain trace):
+After that, pick whatever matches how hard your bot works:
 
 | Plan | Price | What you get |
 |------|-------|--------------|
-| **Unlimited** ⭐ | $9 USDC / month | Scan all you want — _fair use: 50,000/mo, more than any bot needs_ |
-| **Pay as you go** | $0.001 USDC / scan | Only what you use — prepaid or per-call, no commitment |
+| **Trader** | $9 USDC / month | 2,500 scans a month |
+| **Pro** ⭐ | $99 USDC / month | Unlimited — _fair use: 50,000/mo, more than any bot needs_ |
+| **Pay as you go** | $0.01 USDC / scan | Only what you use — prepaid or per-call, no commitment |
 
 Prepaid keys: send USDC once → `POST /api/buy-key` with the tx signature → use header `X-API-Key` on every scan. Or pay per-call via x402 (`X-Payment-Signature` header). No credit card, no account, no lock-in.
 
-**Does it pay for itself?** Work it out with your own numbers rather than ours: the Unlimited tier is $9 a month, so it pays for itself the first time it keeps you out of a position bigger than $9 that goes to zero. Whether that happens once a month or once a week depends on what you trade and how often — we are not going to invent an average for you.
+**Does it pay for itself?** Work it out with your own numbers rather than ours: the Trader plan is $9 a month, so it pays for itself the first time it keeps you out of a position bigger than $9 that goes to zero. Whether that happens once a month or once a week depends on what you trade and how often — we are not going to invent an average for you.
 
 Payment is native on Solana — no credit card, no account, no subscription lock-in.
 
@@ -403,15 +404,15 @@ It renders the 0–100 score, the plain-English verdict, and the active flags (b
 
 | Endpoint | Description | Auth |
 |----------|-------------|------|
-| `POST /api/scan-cabal` | Full cabal analysis | $0.001 USDC |
-| `GET /api/scan-cabal?mintAddress=` | GET version | $0.001 USDC |
+| `POST /api/scan-cabal` | Full cabal analysis | $0.01 USDC |
+| `GET /api/scan-cabal?mintAddress=` | GET version | $0.01 USDC |
 | `GET /map?mint=` | Interactive 3D holder map | Free |
 | `GET /api/cex-funding?mint=` | Per-exchange funding breakdown (which CEXes funded holders, % each) | Free |
 | `GET /api/trade-analysis?mint=` | Cohort PnL (Team/Snipers/Insiders) + wash-trading score + exit-liquidity price impact, one call | Free |
 | `POST /api/watch` | Register an emergency dump webhook for a mint (push on dump/rug start) | Free |
 | `GET /api/info` | Pricing, endpoints | Free |
 | `GET /health` | Uptime check | Free |
-| `POST /mcp` | MCP tool endpoint | $0.001 USDC per call |
+| `POST /mcp` | MCP tool endpoint | $0.01 USDC per call |
 
 ### Emergency dump webhook (auto-exit)
 
@@ -452,7 +453,7 @@ A group of wallets — often funded from the same source and buying in the same 
 Scan the mint with Cabal-Hunter (MCP, REST API, or the free 3D holder map). It traces holder funding back one hop to shared sources, detects same-block bundle buys, flags serial-launcher deployers and same-block coordinated selling, and returns an **Exit-Liquidity Risk** verdict — `risk_level`: `LOW_SIGNAL`, `ELEVATED` or `HIGH`.
 
 **Is it free?**
-Yes — 5 scans/month with no signup or API key, and 250/month with a free key (one email). Beyond that it's $0.001 USDC per scan — which just covers the Helius RPC cost of the live trace — paid natively on Solana.
+Yes — 5 scans/month with no signup or API key, and 250/month with a free key (one email). Beyond that it's $0.01 USDC per scan, paid natively on Solana.
 
 **Is there a way to use it without writing code?**
 Yes — [@TheCabalHunter_Bot](https://t.me/TheCabalHunter_Bot) on Telegram. Paste a mint, get the same scan as a card, and ask it to watch a token you hold so it messages you when a dump starts. Scored tokens are posted to [@CabalHunterAlerts](https://t.me/CabalHunterAlerts).
